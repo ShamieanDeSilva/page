@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gameon — Sri Lanka Growth Strategy 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050810;
+    --bg2: #0a0f1e;
+    --bg3: #0f1629;
+    --card: #111827;
+    --card2: #1a2235;
+    --neon: #00f5a0;
+    --neon2: #00d4ff;
+    --gold: #ffd700;
+    --orange: #ff6b35;
+    --red: #ff3366;
+    --purple: #7c3aed;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --border: rgba(0,245,160,0.15);
+    --glow: 0 0 20px rgba(0,245,160,0.3);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image: 
+      linear-gradient(rgba(0,245,160,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,160,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position:relative; z-index:1; }
+
+  /* HEADER */
+  header {
+    padding: 60px 0 40px;
+    text-align: center;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--neon), var(--neon2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  h1 span { color: var(--neon); text-shadow: var(--glow); }
+  .header-sub {
+    font-size: 20px;
+    color: var(--muted);
+    font-weight: 400;
+    max-width: 600px;
+    margin: 0 auto 32px;
+  }
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .meta-pill {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--neon);
+    letter-spacing: 1px;
+  }
+
+  /* SECTION HEADERS */
+  .section { padding: 60px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .section-tag {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--neon);
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(20px, 3vw, 32px);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  h2 .accent { color: var(--neon2); }
+  .section-desc { color: var(--muted); font-size: 17px; margin-bottom: 40px; max-width: 700px; }
+
+  /* STAT CARDS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .stat-card::before {
+    content:'';
+    position:absolute;
+    top:0; left:0; right:0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon), var(--neon2));
+  }
+  .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,245,160,0.15); }
+  .stat-label { font-size: 12px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; font-family: 'Inter', sans-serif; margin-bottom: 8px; }
+  .stat-value { font-family: 'Orbitron', monospace; font-size: 32px; font-weight: 700; line-height: 1; }
+  .stat-sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .neon { color: var(--neon); }
+  .gold { color: var(--gold); }
+  .orange { color: var(--orange); }
+  .red { color: var(--red); }
+  .blue { color: var(--neon2); }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin: 40px 0; }
+  .progress-label { display:flex; justify-content:space-between; font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .progress-bar { background: var(--card2); border-radius: 4px; height: 12px; overflow: hidden; }
+  .progress-fill { height:100%; border-radius:4px; background: linear-gradient(90deg, var(--neon), var(--neon2)); transition: width 1s; position:relative; }
+  .progress-fill::after {
+    content:'';
+    position:absolute;
+    right:0; top:0; bottom:0;
+    width: 20px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+    animation: shimmer 1.5s infinite;
+  }
+  @keyframes shimmer { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+  /* FUNNEL */
+  .funnel {
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    max-width: 600px;
+    margin: 0 auto 40px;
+  }
+  .funnel-step {
+    background: linear-gradient(90deg, var(--card2), var(--card));
+    border: 1px solid var(--border);
+    padding: 14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:600;
+  }
+  .funnel-step:nth-child(1) { border-left: 3px solid var(--neon2); }
+  .funnel-step:nth-child(2) { border-left: 3px solid var(--neon); }
+  .funnel-step:nth-child(3) { border-left: 3px solid var(--gold); }
+  .funnel-step:nth-child(4) { border-left: 3px solid var(--orange); }
+
+  /* CHANNEL TABLE */
+  .channel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .channel-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 24px;
+    position:relative;
+  }
+  .channel-card.featured { border-color: var(--neon); }
+  .channel-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+  .channel-name { font-family: 'Orbitron', monospace; font-size:16px; font-weight:700; }
+  .channel-budget {
+    background: rgba(0,245,160,0.1);
+    border: 1px solid rgba(0,245,160,0.3);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size:13px;
+    font-family:'Orbitron', monospace;
+    color: var(--neon);
+    white-space:nowrap;
+  }
+  .channel-budget.gold-bg { background: rgba(255,215,0,0.1); border-color: rgba(255,215,0,0.3); color: var(--gold); }
+  .channel-budget.orange-bg { background: rgba(255,107,53,0.1); border-color: rgba(255,107,53,0.3); color: var(--orange); }
+  .channel-budget.blue-bg { background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3); color: var(--neon2); }
+  .channel-reach { font-size:22px; font-weight:700; font-family:'Orbitron',monospace; color:var(--neon2); margin-bottom:4px; }
+  .channel-desc { font-size:14px; color:var(--muted); line-height:1.5; margin-bottom:16px; }
+  .channel-tactics { list-style:none; }
+  .channel-tactics li { font-size:14px; padding: 4px 0; color:var(--text); }
+  .channel-tactics li::before { content:'▸ '; color:var(--neon); }
+
+  /* TIMELINE */
+  .timeline { position:relative; }
+  .timeline::before {
+    content:'';
+    position:absolute;
+    left: 20px;
+    top:0; bottom:0;
+    width:2px;
+    background: linear-gradient(180deg, var(--neon), var(--neon2), var(--purple));
+  }
+  .week-block {
+    margin-left: 52px;
+    margin-bottom: 32px;
+    position:relative;
+  }
+  .week-block::before {
+    content:'';
+    position:absolute;
+    left:-40px;
+    top:16px;
+    width:16px; height:16px;
+    border-radius:50%;
+    background: var(--neon);
+    box-shadow: 0 0 12px var(--neon);
+  }
+  .week-header {
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+  }
+  .week-label {
+    font-family:'Orbitron',monospace;
+    font-size:13px;
+    font-weight:700;
+    color:var(--neon);
+    background: rgba(0,245,160,0.1);
+    border: 1px solid rgba(0,245,160,0.3);
+    padding:4px 12px;
+    border-radius:4px;
+  }
+  .week-title { font-size:20px; font-weight:700; }
+  .week-dates { font-size:13px; color:var(--muted); font-family:'Inter',sans-serif; }
+  .week-target {
+    font-family:'Orbitron',monospace;
+    font-size:13px;
+    color:var(--gold);
+    margin-left:auto;
+  }
+  .task-list { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:8px; }
+  .task {
+    background: var(--card2);
+    border-radius:8px;
+    padding:10px 14px;
+    font-size:14px;
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    border-left: 2px solid transparent;
+  }
+  .task.ops { border-left-color: var(--neon2); }
+  .task.mktg { border-left-color: var(--neon); }
+  .task.content { border-left-color: var(--gold); }
+  .task.paid { border-left-color: var(--orange); }
+  .task.community { border-left-color: var(--purple); }
+  .task-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+  .task-text strong { display:block; font-size:13px; font-weight:600; }
+  .task-text span { font-size:12px; color:var(--muted); }
+  .task-owner {
+    margin-left:auto;
+    flex-shrink:0;
+    background: rgba(255,255,255,0.05);
+    border-radius:4px;
+    padding:1px 6px;
+    font-size:11px;
+    font-family:'Inter',sans-serif;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+
+  /* KPI TABLE */
+  .kpi-table { width:100%; border-collapse:collapse; }
+  .kpi-table th {
+    text-align:left;
+    padding:12px 16px;
+    font-family:'Orbitron',monospace;
+    font-size:11px;
+    letter-spacing:2px;
+    color:var(--muted);
+    text-transform:uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .kpi-table td {
+    padding:12px 16px;
+    font-size:15px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align:middle;
+  }
+  .kpi-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .kpi-name { font-weight:600; }
+  .kpi-target { font-family:'Orbitron',monospace; font-size:14px; color:var(--neon); }
+  .badge {
+    display:inline-block;
+    padding:2px 8px;
+    border-radius:4px;
+    font-size:12px;
+    font-family:'Inter',sans-serif;
+  }
+  .badge-critical { background:rgba(255,51,102,0.15); color:var(--red); border:1px solid rgba(255,51,102,0.3); }
+  .badge-high { background:rgba(255,107,53,0.15); color:var(--orange); border:1px solid rgba(255,107,53,0.3); }
+  .badge-med { background:rgba(255,215,0,0.1); color:var(--gold); border:1px solid rgba(255,215,0,0.3); }
+  .badge-low { background:rgba(0,245,160,0.1); color:var(--neon); border:1px solid rgba(0,245,160,0.3); }
+
+  /* INFLUENCER TABLE */
+  .inf-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:12px; }
+  .inf-card {
+    background: var(--card2);
+    border:1px solid rgba(255,255,255,0.07);
+    border-radius:10px;
+    padding:16px;
+  }
+  .inf-platform { font-size:11px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:4px; }
+  .inf-name { font-size:17px; font-weight:700; margin-bottom:4px; }
+  .inf-size { font-size:13px; color:var(--neon2); font-family:'Orbitron',monospace; }
+  .inf-type { font-size:13px; color:var(--muted); }
+  .inf-deal { margin-top:10px; font-size:13px; background:rgba(0,245,160,0.06); padding:6px 10px; border-radius:6px; color:var(--text); }
+
+  /* COMMUNITY */
+  .community-table { width:100%; border-collapse:collapse; }
+  .community-table th {
+    text-align:left; padding:10px 14px;
+    background:var(--card2);
+    font-size:12px; letter-spacing:1px;
+    color:var(--muted); text-transform:uppercase;
+    font-family:'Inter',sans-serif;
+  }
+  .community-table td { padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.04); font-size:14px; }
+  .community-table tr:hover td { background:rgba(255,255,255,0.02); }
+  .page-name { font-weight:600; color:var(--text); }
+  .followers { font-family:'Orbitron',monospace; font-size:13px; color:var(--neon); }
+  .deal-type { font-size:12px; padding:2px 8px; border-radius:4px; }
+
+  /* BUDGET PIE VISUAL */
+  .budget-visual { display:grid; grid-template-columns: 1fr 1fr; gap:32px; align-items:center; }
+  @media(max-width:600px){ .budget-visual { grid-template-columns:1fr; } }
+  .budget-bars { display:flex; flex-direction:column; gap:12px; }
+  .budget-row { }
+  .budget-row-label { display:flex; justify-content:space-between; font-size:14px; margin-bottom:4px; }
+  .budget-bar-wrap { background:var(--card2); border-radius:4px; height:8px; overflow:hidden; }
+  .budget-bar-fill { height:100%; border-radius:4px; }
+  .total-box {
+    background: linear-gradient(135deg, rgba(0,245,160,0.08), rgba(0,212,255,0.08));
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:32px;
+    text-align:center;
+  }
+  .total-label { font-size:13px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
+  .total-amount { font-family:'Orbitron',monospace; font-size:42px; font-weight:900; color:var(--neon); text-shadow:var(--glow); }
+  .total-sub { font-size:14px; color:var(--muted); margin-top:8px; }
+
+  /* ACTIVATION SYSTEM */
+  .activation-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; }
+  .activation-card {
+    background:var(--card);
+    border:1px solid rgba(255,255,255,0.07);
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+  }
+  .activation-icon { font-size:36px; margin-bottom:12px; }
+  .activation-title { font-weight:700; font-size:16px; margin-bottom:6px; }
+  .activation-desc { font-size:13px; color:var(--muted); }
+
+  /* VIRAL LOOPS */
+  .viral-flow {
+    display:flex;
+    align-items:center;
+    gap:0;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin: 32px 0;
+  }
+  .viral-node {
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 18px;
+    text-align:center;
+    font-size:13px;
+    font-weight:600;
+    min-width:120px;
+  }
+  .viral-arrow {
+    color:var(--neon);
+    font-size:24px;
+    padding:0 6px;
+  }
+
+  /* FINANCIAL */
+  .financial-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:16px; }
+  .fin-card {
+    background:var(--card);
+    border:1px solid rgba(255,255,255,0.07);
+    border-radius:12px;
+    padding:24px;
+    position:relative;
+    overflow:hidden;
+  }
+  .fin-card::after {
+    content:'';
+    position:absolute;
+    bottom:0; right:0;
+    width:80px; height:80px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(0,245,160,0.06), transparent);
+  }
+  .fin-label { font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; font-family:'Inter',sans-serif; }
+  .fin-value { font-family:'Orbitron',monospace; font-size:28px; font-weight:700; color:var(--gold); }
+  .fin-basis { font-size:13px; color:var(--muted); margin-top:6px; }
+
+  /* ALERT BOX */
+  .alert {
+    background:linear-gradient(135deg, rgba(255,51,102,0.08), rgba(255,107,53,0.08));
+    border:1px solid rgba(255,51,102,0.3);
+    border-radius:10px;
+    padding:20px 24px;
+    margin-top:24px;
+    font-size:15px;
+  }
+  .alert strong { color:var(--red); font-family:'Orbitron',monospace; font-size:13px; letter-spacing:2px; }
+
+  .success-box {
+    background:linear-gradient(135deg, rgba(0,245,160,0.06), rgba(0,212,255,0.06));
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px 24px;
+    margin-top:24px;
+    font-size:15px;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align:center;
+    padding:40px 0 60px;
+    color:var(--muted);
+    font-size:14px;
+    font-family:'Inter',sans-serif;
+    border-top:1px solid rgba(255,255,255,0.05);
+    margin-top:60px;
+  }
+  footer span { color:var(--neon); }
+
+  /* TABS for weeks */
+  .divider {
+    border:none;
+    border-top:1px solid rgba(255,255,255,0.05);
+    margin: 24px 0;
+  }
+
+  /* Responsive */
+  @media(max-width:768px){
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .header-meta { gap:12px; }
+    .timeline::before { left:10px; }
+    .week-block { margin-left:32px; }
+    .week-block::before { left:-28px; }
+  }
+
+  /* ANIMATION */
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+  .live-dot {
+    display:inline-block;
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--neon);
+    margin-right:6px;
+    animation: pulse 1.5s infinite;
+  }
+
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media(max-width:700px){ .two-col { grid-template-columns:1fr; } }
+
+  .pill {
+    display:inline-block;
+    padding:2px 10px;
+    border-radius:50px;
+    font-size:12px;
+    font-family:'Inter',sans-serif;
+    margin-right:6px;
+    margin-bottom:4px;
+  }
+  .pill-green { background:rgba(0,245,160,0.12); color:var(--neon); }
+  .pill-blue { background:rgba(0,212,255,0.12); color:var(--neon2); }
+  .pill-gold { background:rgba(255,215,0,0.12); color:var(--gold); }
+  .pill-red { background:rgba(255,51,102,0.12); color:var(--red); }
+  .pill-purple { background:rgba(124,58,237,0.12); color:#a78bfa; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="container">
+    <div class="logo-badge">⚡ Gameon World — Growth Strategy</div>
+    <h1>50,000 Users by<br><span>April 30, 2026</span></h1>
+    <p class="header-sub">Sri Lanka First Market — Full Sprint Growth Playbook for the Internal Team</p>
+    <div class="header-meta">
+      <div class="meta-pill"><span class="live-dot"></span>7,000 → 50,000 Users</div>
+      <div class="meta-pill">⏱ 50 Days Sprint</div>
+      <div class="meta-pill">🇱🇰 Sri Lanka Market</div>
+      <div class="meta-pill">🎯 10%+ Active Rate</div>
+    </div>
+  </div>
+</header>
+
+<!-- EXECUTIVE NUMBERS -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">— Mission Control</div>
+    <h2>The <span class="accent">Numbers</span> We're Chasing</h2>
+    <p class="section-desc">Starting from 7,000 users today. We need to add 43,000 net new users in 50 days. Here's what that looks like broken down.</p>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">Current Users</div>
+        <div class="stat-value neon">7,000</div>
+        <div class="stat-sub">~1,400 active (20%)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Target by Apr 30</div>
+        <div class="stat-value gold">50,000</div>
+        <div class="stat-sub">5,000+ active (10%+)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Net New Needed</div>
+        <div class="stat-value orange">43,000</div>
+        <div class="stat-sub">Across 50 days</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Daily Velocity</div>
+        <div class="stat-value blue">860</div>
+        <div class="stat-sub">New signups per day avg</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Weekly Velocity</div>
+        <div class="stat-value neon">6,000+</div>
+        <div class="stat-sub">Ramping week over week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active User Target</div>
+        <div class="stat-value gold">5,000+</div>
+        <div class="stat-sub">Minimum 10% of base</div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progress to 50K — Current: 7,000 (14%)</span><span>Target: 50,000</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:14%"></div></div>
+    </div>
+
+    <div class="funnel">
+      <div class="funnel-step">
+        <span>👁 Reach (Awareness)</span><span class="blue">~2,500,000 impressions</span>
+      </div>
+      <div class="funnel-step">
+        <span>🖱 Clicks to Platform</span><span class="neon">~150,000 clicks</span>
+      </div>
+      <div class="funnel-step">
+        <span>📲 Sign Ups (35% of clicks)</span><span class="gold">~52,000 registrations</span>
+      </div>
+      <div class="funnel-step">
+        <span>✅ Verified Active Users (10%+)</span><span class="orange">5,000+ active monthly</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUDGET -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">— Budget Allocation</div>
+    <h2>Total Campaign <span class="accent">Budget</span></h2>
+    <p class="section-desc">A focused $18,000 USD sprint budget (~LKR 6.3M) deployed across the highest-leverage channels available in Sri Lanka.</p>
+
+    <div class="budget-visual">
+      <div class="budget-bars">
+        <div class="budget-row">
+          <div class="budget-row-label"><span>📱 Paid Digital Ads (FB/TikTok/IG)</span><span class="orange">$6,000 — 33%</span></div>
+          <div class="budget-bar-wrap"><div class="budget-bar-fill" style="width:33%; background: linear-gradient(90deg,#ff6b35,#ff9466);"></div></div>
+        </div>
+        <div class="budget-row">
+          <div class="budget-row-label"><span>🎤 Influencer Campaigns</span><span class="neon">$4,500 — 25%</span></div>
+          <div class="budget-bar-wrap"><div class="budget-bar-fill" style="width:25%; background: linear-gradient(90deg,#00f5a0,#00d4ff);"></div></div>
+        </div>
+        <div class="budget-row">
+          <div class="budget-row-label"><span>👥 Community Page Deals</span><span class="gold">$2,500 — 14%</span></div>
+          <div class="budget-bar-wrap"><div class="budget-bar-fill" style="width:14%; background: linear-gradient(90deg,#ffd700,#ffaa00);"></div></div>
+        </div>
+        <div class="budget-row">
+          <div class="budget-row-label"><span>🎮 Streamer Partnerships</span><span class="blue">$2,500 — 14%</span></div>
+          <div class="budget-bar-wrap"><div class="budget-bar-fill" style="width:14%; background: linear-gradient(90deg,#00d4ff,#0088ff);"></div></div>
+        </div>
+        <div class="budget-row">
+          <div class="budget-row-label"><span>🏆 Tournaments & Events</span><span style="color:#a78bfa">$1,500 — 8%</span></div>
+          <div class="budget-bar-wrap"><div class="budget-bar-fill" style="width:8%; background: linear-gradient(90deg,#7c3aed,#a78bfa);"></div></div>
+        </div>
+        <div class="budget-row">
+          <div class="budget-row-label"><span>📦 Referral Rewards / Incentives</span><span class="red">$1,000 — 6%</span></div>
+          <div class="budget-bar-wrap"><div class="budget-bar-fill" style="width:6%; background: linear-gradient(90deg,#ff3366,#ff6688);"></div></div>
+        </div>
+      </div>
+      <div class="total-box">
+        <div class="total-label">Total Sprint Budget</div>
+        <div class="total-amount">$18,000</div>
+        <div class="total-sub">≈ LKR 6.3 Million<br><br>
+          <span style="font-size:13px; color:#64748b">Cost per acquired user target<br></span>
+          <span style="font-family:'Orbitron',monospace; font-size:20px; color:var(--neon2);">$0.42</span>
+          <span style="color:#64748b; font-size:13px;"> / user</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAID ADS -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">— Channel Strategy</div>
+    <h2>Full <span class="accent">Channel Breakdown</span></h2>
+    <p class="section-desc">Six interlocking channels hitting the Sri Lanka gaming audience from every angle simultaneously.</p>
+    <div class="channel-grid">
+
+      <div class="channel-card featured">
+        <div class="channel-header">
+          <div class="channel-name">📱 Paid Digital Ads</div>
+          <div class="channel-budget">$6,000</div>
+        </div>
+        <div class="channel-reach">~1.2M reach</div>
+        <div class="channel-desc">Facebook + Instagram + TikTok ads hyper-targeted at Sri Lankan gamers aged 16–35. Retargeting flows to capture drop-offs.</div>
+        <ul class="channel-tactics">
+          <li>Facebook Gaming interest targeting (SL gamers)</li>
+          <li>TikTok For Business — gaming vertical</li>
+          <li>IG Reels ads with gameplay clips</li>
+          <li>Retargeting pixel on all landing pages</li>
+          <li>A/B test 4 creatives per week, kill losers</li>
+          <li>Target CPC: $0.04–0.08 (LKR 12–25)</li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-name">🎤 Influencers</div>
+          <div class="channel-budget gold-bg">$4,500</div>
+        </div>
+        <div class="channel-reach" style="color:var(--gold)">~600K reach</div>
+        <div class="channel-desc">Tiered mix of macro, mid, and micro influencers across YouTube, TikTok, Instagram and Facebook — Sinhala + English.</div>
+        <ul class="channel-tactics">
+          <li>2x Macro (100K+ followers) — anchor deal</li>
+          <li>5x Mid-tier (20–80K) — main volume drivers</li>
+          <li>15x Micro (5–20K) — hyper-niche, high trust</li>
+          <li>Dedicated "Play & Earn" sponsored content</li>
+          <li>Each gets unique referral code (track ROI)</li>
+          <li>Performance bonus for top 3 creators</li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-name">👥 Community Pages</div>
+          <div class="channel-budget orange-bg">$2,500</div>
+        </div>
+        <div class="channel-reach" style="color:var(--orange)">~400K reach</div>
+        <div class="channel-desc">Direct paid post deals with Sri Lanka's biggest gaming Facebook groups and communities — posts, pinned announcements, events.</div>
+        <ul class="channel-tactics">
+          <li>Sri Lanka Gamers Community (biggest FB group)</li>
+          <li>Free Fire Sri Lanka / PUBG SL groups</li>
+          <li>SL E-Sports / COD Mobile SL pages</li>
+          <li>University gaming clubs (via admins)</li>
+          <li>Reddit r/srilanka + Discord SL gaming</li>
+          <li>WhatsApp gaming broadcast groups</li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-name">🎮 Streamers</div>
+          <div class="channel-budget blue-bg">$2,500</div>
+        </div>
+        <div class="channel-reach" style="color:var(--neon2)">~200K live viewers</div>
+        <div class="channel-desc">Live streaming is the fastest-growing gaming channel in SL. Streamers play Gameon LIVE — their audience signs up in real time.</div>
+        <ul class="channel-tactics">
+          <li>3x Facebook Gaming SL streamers (priority)</li>
+          <li>2x YouTube Live SL gaming channels</li>
+          <li>Live "Play with me" sessions on Gameon</li>
+          <li>Streamer gets % of their referral signups' earnings</li>
+          <li>Special streamer-only tournament with prize pool</li>
+          <li>Overlays + branded stream assets provided</li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-name">🏆 Tournaments & Events</div>
+          <div class="channel-budget" style="background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.3);color:#a78bfa">$1,500</div>
+        </div>
+        <div class="channel-reach" style="color:#a78bfa">Virality engine</div>
+        <div class="channel-desc">Weekly mini-tournaments with real cash prizes force organic word-of-mouth. Winners share results — creating social proof loops.</div>
+        <ul class="channel-tactics">
+          <li>Weekly LKR 25K prize tournaments (5 events)</li>
+          <li>University Campus Challenge cup</li>
+          <li>"Top 100 SL Gamers" leaderboard launch</li>
+          <li>1v1 PvP challenge clips shareable on TikTok</li>
+          <li>Partner with Esports Lanka / SLGA</li>
+          <li>Trophy NFT for Top 10 finishers</li>
+        </ul>
+      </div>
+
+      <div class="channel-card">
+        <div class="channel-header">
+          <div class="channel-name">📦 Referral & Viral</div>
+          <div class="channel-budget" style="background:rgba(255,51,102,0.1);border-color:rgba(255,51,102,0.3);color:var(--red)">$1,000</div>
+        </div>
+        <div class="channel-reach" style="color:var(--red)">K-factor > 1.2</div>
+        <div class="channel-desc">Build a compounding referral system where every user brings 1.2+ more users. This is the multiplier on every other channel.</div>
+        <ul class="channel-tactics">
+          <li>"Invite 3, get 500 GON tokens" launch offer</li>
+          <li>Referral leaderboard — top referrer wins prize</li>
+          <li>Share-to-win mechanics on every game result</li>
+          <li>WhatsApp-native share cards (auto-generated)</li>
+          <li>Group invite bonus (bring 5+ friends together)</li>
+          <li>Milestone unlocks at 10, 25, 50 referrals</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SRI LANKA COMMUNITY PAGES -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">— Sri Lanka Intel</div>
+    <h2>Biggest <span class="accent">Community Pages</span> to Partner</h2>
+    <p class="section-desc">Priority outreach list — ranked by estimated reach and alignment with Gameon's target audience. Start negotiations immediately.</p>
+
+    <table class="community-table">
+      <thead>
+        <tr>
+          <th>Page / Group Name</th>
+          <th>Platform</th>
+          <th>Est. Followers</th>
+          <th>Audience</th>
+          <th>Deal Type</th>
+          <th>Budget</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="page-name">Sri Lanka Gamers Community</div></td>
+          <td>Facebook Group</td>
+          <td><div class="followers">150K+</div></td>
+          <td>All gamers</td>
+          <td><span class="deal-type badge badge-critical">PRIORITY</span></td>
+          <td>$400</td>
+        </tr>
+        <tr>
+          <td><div class="page-name">Free Fire Sri Lanka Official</div></td>
+          <td>Facebook Page</td>
+          <td><div class="followers">120K+</div></td>
+          <td>Mobile gamers</td>
+          <td><span class="deal-type badge badge-critical">PRIORITY</span></td>
+          <td>$350</td>
+        </tr>
+        <tr>
+          <td><div class="page-name">PUBG Mobile Sri Lanka</div></td>
+          <td>Facebook Page</td>
+          <td><div class="followers">80K+</div></td>
+          <td>Mobile PvP</td>
+          <td><span class="deal-type badge badge-high">HIGH</span></td>
+          <td>$300</td>
+        </tr>
+        <tr>
+          <td><div class="page-name">COD Mobile Sri Lanka</div></td>
+          <td>Facebook Group</td>
+          <td><div class="followers">60K+</div></td>
+          <td>FPS gamers</td>
+          <td><span class="deal-type badge badge-high">HIGH</span></td>
+          <td>$250</td>
+        </tr>
+        <tr>
+          <td><div class="page-name">E-Sports Lanka</div></td>
+          <td>Facebook Page</td>
+          <td><div class="followers">55K+</div></td>
+          <td>Competitive</td>
+          <td><span class="deal-type badge badge-high">HIGH</span></td>
+          <td>$250</td>
+        </tr>
+        <tr>
+          <td><div class="page-name">Sri Lanka Gaming Network</div></td>
+          <td>Facebook + IG</td>
+          <td><div class="followers">45K+</div></td>
+          <td>Mixed gamers</td>
+          <td><span class="deal-type badge badge-med">MED</span></td>
+          <td>$200</td>
+        </tr>
+        <tr>
+          <td><div class="page-name">Lanka Mobile Gamers</div></td>
+          <td>Facebook Group</td>
+          <td><div class="followers">40K+</div></td>
+          <td>Mobile-first</td>
+          <td><span class="deal-type badge badge-med">MED</span></td>
+          <td>$150</td>
+        </tr>
+        <tr>
+          <td><div class="page-name">Valorant / CS2 SL Community</div></td>
+          <td>Discord + FB</td>
+          <td><div class="followers">30K+</div></td>
+          <td>PC gamers</td>
+          <td><span class="deal-type badge badge-med">MED</span></td>
+          <td>$150</td>
+        </tr>
+        <tr>
+          <td><div class="page-name">SL Crypto & Gaming</div></td>
+          <td>Telegram + FB</td>
+          <td><div class="followers">25K+</div></td>
+          <td>Web3 + crypto</td>
+          <td><span class="deal-type badge badge-low">CROSS-SELL</span></td>
+          <td>$100</td>
+        </tr>
+        <tr>
+          <td><div class="page-name">University Gaming Clubs (10x)</div></td>
+          <td>WhatsApp + IG</td>
+          <td><div class="followers">~20K total</div></td>
+          <td>Students 18–24</td>
+          <td><span class="deal-type badge badge-low">FREE / BARTER</span></td>
+          <td>$150 prizes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- INFLUENCER PLAN -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">— Influencer Strategy</div>
+    <h2>Influencer <span class="accent">Activation Plan</span></h2>
+    <p class="section-desc">Tiered influencer model — macro for trust & reach, mid for volume, micro for conversion. All deals include unique referral codes for attribution.</p>
+    <div class="inf-grid">
+      <div class="inf-card">
+        <div class="inf-platform">YouTube / FB Gaming</div>
+        <div class="inf-name">🥇 Macro Creator A</div>
+        <div class="inf-size">150K–300K followers</div>
+        <div class="inf-type">Full gaming channel, Sinhala content</div>
+        <div class="inf-deal">💰 Deal: $800–1,000 fixed + 5% referral bonus. 2x dedicated videos + weekly mentions. 30-day exclusivity on gaming prediction platforms.</div>
+      </div>
+      <div class="inf-card">
+        <div class="inf-platform">TikTok / Instagram</div>
+        <div class="inf-name">🥇 Macro Creator B</div>
+        <div class="inf-size">100K–200K followers</div>
+        <div class="inf-type">Short-form gaming + tech reviews</div>
+        <div class="inf-deal">💰 Deal: $600–800 fixed + referral bonus. 4x TikTok posts, 3x IG Stories, 1x Reel. Must show live gameplay earning real money.</div>
+      </div>
+      <div class="inf-card">
+        <div class="inf-platform">Facebook Gaming</div>
+        <div class="inf-name">⚡ Mid-Tier #1 (Streamer)</div>
+        <div class="inf-size">40K–80K followers</div>
+        <div class="inf-type">Live streamer, daily content</div>
+        <div class="inf-deal">💰 Deal: $300–400. 2x live streams playing Gameon. Stream overlay logo. Real-time referral counter shown on stream.</div>
+      </div>
+      <div class="inf-card">
+        <div class="inf-platform">YouTube Shorts</div>
+        <div class="inf-name">⚡ Mid-Tier #2</div>
+        <div class="inf-size">30K–60K followers</div>
+        <div class="inf-type">How-to + game guides</div>
+        <div class="inf-deal">💰 Deal: $250–350. 3x Shorts showing "How I earned LKR X on Gameon today." Tutorial-style content converts best.</div>
+      </div>
+      <div class="inf-card">
+        <div class="inf-platform">TikTok</div>
+        <div class="inf-name">⚡ Mid-Tier #3</div>
+        <div class="inf-size">25K–50K followers</div>
+        <div class="inf-type">Lifestyle + gaming crossover</div>
+        <div class="inf-deal">💰 Deal: $200–300. Focus on "passive income gaming" angle. "I made LKR 5,000 playing games" style content.</div>
+      </div>
+      <div class="inf-card">
+        <div class="inf-platform">Instagram + Facebook</div>
+        <div class="inf-name">🎯 15x Micro Influencers</div>
+        <div class="inf-size">5K–20K each</div>
+        <div class="inf-type">Niche gaming + student communities</div>
+        <div class="inf-deal">💰 Deal: $50–100 each or barter (GON tokens + prizes). High conversion rate due to trust. Target gaming club admins, uni influencers.</div>
+      </div>
+    </div>
+
+    <div class="success-box" style="margin-top:24px">
+      <strong style="color:var(--neon); font-family:'Orbitron',monospace; font-size:12px; letter-spacing:2px;">CREATOR BRIEF — KEY MESSAGE</strong><br>
+      All creators must show <strong>real money earned</strong> on Gameon — not just play. Show the withdrawal, the wallet, the LKR payout. "Play. Earn. Withdraw — Today." This is the hook that converts in Sri Lanka.
+    </div>
+  </div>
+</section>
+
+<!-- VIRAL LOOP -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">— Viral Mechanics</div>
+    <h2>The <span class="accent">Viral Loop</span> System</h2>
+    <p class="section-desc">Design every touchpoint to generate a share. Target a K-factor above 1.2 — meaning every 10 users bring in 12 more without paid spend.</p>
+
+    <div class="viral-flow">
+      <div class="viral-node">🎮 User Wins<br>a Game</div>
+      <div class="viral-arrow">→</div>
+      <div class="viral-node">📤 Auto-Share<br>Card Generated</div>
+      <div class="viral-arrow">→</div>
+      <div class="viral-node">💬 WhatsApp /<br>TikTok Share</div>
+      <div class="viral-arrow">→</div>
+      <div class="viral-node">👤 Friend Clicks<br>Referral Link</div>
+      <div class="viral-arrow">→</div>
+      <div class="viral-node">✅ New User<br>Signs Up</div>
+      <div class="viral-arrow">→</div>
+      <div class="viral-node">🏆 Original User<br>Gets GON Tokens</div>
+    </div>
+
+    <div class="activation-grid">
+      <div class="activation-card">
+        <div class="activation-icon">🎰</div>
+        <div class="activation-title">Win & Share</div>
+        <div class="activation-desc">Every game win generates a sharable clip/card with the player's earnings. Pre-formatted for WhatsApp, TikTok & IG Stories.</div>
+      </div>
+      <div class="activation-card">
+        <div class="activation-icon">👥</div>
+        <div class="activation-title">Squad Invite</div>
+        <div class="activation-desc">Bring 3 friends = 500 GON tokens free. Friends who join get a 100 GON welcome bonus too — double incentive.</div>
+      </div>
+      <div class="activation-card">
+        <div class="activation-icon">📊</div>
+        <div class="activation-title">Leaderboard Fame</div>
+        <div class="activation-desc">Weekly "Top 100 Sri Lanka Gamers" leaderboard shared publicly. Players grind to appear — drives retention AND virality.</div>
+      </div>
+      <div class="activation-card">
+        <div class="activation-icon">🏅</div>
+        <div class="activation-title">Tournament Clips</div>
+        <div class="activation-desc">Auto-generated highlight clips from tournament plays. Shareable to TikTok and FB with Gameon branding embedded.</div>
+      </div>
+      <div class="activation-card">
+        <div class="activation-icon">💸</div>
+        <div class="activation-title">"First Withdrawal" Moment</div>
+        <div class="activation-desc">Prompt users to share a screenshot of their first LKR withdrawal. "I just withdrew LKR 1,500 from @gameonworld!" — pure word of mouth gold.</div>
+      </div>
+      <div class="activation-card">
+        <div class="activation-icon">🔥</div>
+        <div class="activation-title">Streak Bonuses</div>
+        <div class="activation-desc">Daily login + play streaks unlock multiplier rewards. 7-day streak = double earnings. Drives daily active user metric above 10%.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WEEKLY SPRINT PLAN -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">— Task Manager</div>
+    <h2>7-Week <span class="accent">Sprint Calendar</span></h2>
+    <p class="section-desc">Each week has a theme, daily user target, and team tasks assigned by function. Execute this in sequence — the weeks build on each other.</p>
+
+    <div class="timeline">
+
+      <!-- WEEK 1 -->
+      <div class="week-block">
+        <div class="week-header">
+          <div class="week-label">WEEK 1</div>
+          <div class="week-title">🔧 Launch Prep & Ignition</div>
+          <div class="week-dates">Mar 11–17, 2026</div>
+          <div class="week-target">Target: +2,000 → 9,000</div>
+        </div>
+        <div class="task-list">
+          <div class="task ops">
+            <div class="task-icon">⚙️</div>
+            <div class="task-text"><strong>Referral system live & tested</strong><span>Unique codes, tracking dashboard, GON reward automation</span></div>
+            <div class="task-owner">TECH</div>
+          </div>
+          <div class="task mktg">
+            <div class="task-icon">🤝</div>
+            <div class="task-text"><strong>Sign top 3 community page deals</strong><span>Sri Lanka Gamers, Free Fire SL, PUBG SL — contracts signed</span></div>
+            <div class="task-owner">BIZ DEV</div>
+          </div>
+          <div class="task mktg">
+            <div class="task-icon">🎤</div>
+            <div class="task-text"><strong>Lock 2 macro influencer deals</strong><span>Contracts + briefs sent. Content deadline: Mar 20</span></div>
+            <div class="task-owner">MARKETING</div>
+          </div>
+          <div class="task content">
+            <div class="task-icon">🎬</div>
+            <div class="task-text"><strong>Produce 10 ad creatives</strong><span>4x video ads, 4x static, 2x Story formats. A/B ready</span></div>
+            <div class="task-owner">CREATIVE</div>
+          </div>
+          <div class="task paid">
+            <div class="task-icon">📱</div>
+            <div class="task-text"><strong>Launch Facebook & TikTok ad campaigns</strong><span>$1,500 initial deployment — test phase with 4 audiences</span></div>
+            <div class="task-owner">PAID ADS</div>
+          </div>
+          <div class="task community">
+            <div class="task-icon">📣</div>
+            <div class="task-text"><strong>Onboard 10 micro influencers</strong><span>Brief, GON tokens pre-loaded to accounts, content scheduled</span></div>
+            <div class="task-owner">MARKETING</div>
+          </div>
+          <div class="task ops">
+            <div class="task-icon">📊</div>
+            <div class="task-text"><strong>Set up analytics dashboard</strong><span>Daily signups, channel attribution, active rate tracking</span></div>
+            <div class="task-owner">ANALYTICS</div>
+          </div>
+          <div class="task content">
+            <div class="task-icon">🏆</div>
+            <div class="task-text"><strong>Announce Week 1 Tournament (LKR 25K prize)</strong><span>Registration opens. Promoted on all community pages.</span></div>
+            <div class="task-owner">COMMUNITY</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 2 -->
+      <div class="week-block">
+        <div class="week-header">
+          <div class="week-label">WEEK 2</div>
+          <div class="week-title">🚀 Community Blitz Goes Live</div>
+          <div class="week-dates">Mar 18–24, 2026</div>
+          <div class="week-target">Target: +6,000 → 15,000</div>
+        </div>
+        <div class="task-list">
+          <div class="task mktg">
+            <div class="task-icon">📢</div>
+            <div class="task-text"><strong>Macro influencer posts go live (Day 18)</strong><span>Both creators post simultaneously for maximum spike</span></div>
+            <div class="task-owner">MARKETING</div>
+          </div>
+          <div class="task community">
+            <div class="task-icon">👥</div>
+            <div class="task-text"><strong>Community page paid posts run (all 5 pages)</strong><span>Pinned announcement posts + event promo content</span></div>
+            <div class="task-owner">BIZ DEV</div>
+          </div>
+          <div class="task paid">
+            <div class="task-icon">📈</div>
+            <div class="task-text"><strong>Scale winning ad sets — kill losers</strong><span>Review Week 1 data. 2x budget on top performers. Cut bottom 50%.</span></div>
+            <div class="task-owner">PAID ADS</div>
+          </div>
+          <div class="task ops">
+            <div class="task-icon">🎮</div>
+            <div class="task-text"><strong>First streamer live session (Facebook Gaming)</strong><span>3-hour live stream. Real-money gameplay shown. Referral code on screen.</span></div>
+            <div class="task-owner">PARTNERSHIPS</div>
+          </div>
+          <div class="task content">
+            <div class="task-icon">📲</div>
+            <div class="task-text"><strong>WhatsApp broadcast campaign</strong><span>Partner with 20 WhatsApp gaming group admins. Drip 3 messages over the week.</span></div>
+            <div class="task-owner">COMMUNITY</div>
+          </div>
+          <div class="task mktg">
+            <div class="task-icon">🏆</div>
+            <div class="task-text"><strong>Tournament Week 1 runs (Mar 21)</strong><span>Live event. Promote results on all channels. Winner announcement shared.</span></div>
+            <div class="task-owner">EVENTS</div>
+          </div>
+          <div class="task community">
+            <div class="task-icon">🎓</div>
+            <div class="task-text"><strong>University campus outreach starts</strong><span>Contact gaming club presidents at Moratuwa, Colombo, NSBM, SLIIT, APIIT</span></div>
+            <div class="task-owner">COMMUNITY</div>
+          </div>
+          <div class="task ops">
+            <div class="task-icon">📊</div>
+            <div class="task-text"><strong>Mid-week signup review (Mar 21)</strong><span>Are we on track for +6K? If behind, trigger emergency micro-influencer push.</span></div>
+            <div class="task-owner">GROWTH</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 3 -->
+      <div class="week-block">
+        <div class="week-header">
+          <div class="week-label">WEEK 3</div>
+          <div class="week-title">🔥 Referral Engine & Streamer Surge</div>
+          <div class="week-dates">Mar 25–31, 2026</div>
+          <div class="week-target">Target: +8,000 → 23,000</div>
+        </div>
+        <div class="task-list">
+          <div class="task community">
+            <div class="task-icon">📦</div>
+            <div class="task-text"><strong>Referral "Invite 3 Get 500 GON" campaign launches</strong><span>Push notification + email blast to all 15K users</span></div>
+            <div class="task-owner">GROWTH</div>
+          </div>
+          <div class="task mktg">
+            <div class="task-icon">🎮</div>
+            <div class="task-text"><strong>Streamer #2 and #3 go live this week</strong><span>3 total live sessions across the week. Different time slots.</span></div>
+            <div class="task-owner">PARTNERSHIPS</div>
+          </div>
+          <div class="task content">
+            <div class="task-icon">📱</div>
+            <div class="task-text"><strong>TikTok organic push: "Earned LKR challenge"</strong><span>Brief 20 micro-creators to post wins/withdrawals with #GamingEarnings</span></div>
+            <div class="task-owner">CREATIVE</div>
+          </div>
+          <div class="task paid">
+            <div class="task-icon">🎯</div>
+            <div class="task-text"><strong>Retargeting campaign launch</strong><span>Retarget everyone who visited app.gameonworld.ai but didn't sign up</span></div>
+            <div class="task-owner">PAID ADS</div>
+          </div>
+          <div class="task community">
+            <div class="task-icon">🏫</div>
+            <div class="task-text"><strong>University Gameon Campus Championship announced</strong><span>5 unis compete. LKR 50K prize pool. Teams of 5.</span></div>
+            <div class="task-owner">EVENTS</div>
+          </div>
+          <div class="task ops">
+            <div class="task-icon">🤖</div>
+            <div class="task-text"><strong>Auto-share win cards live in-app</strong><span>Every win triggers a share prompt. WhatsApp & TikTok optimized.</span></div>
+            <div class="task-owner">TECH</div>
+          </div>
+          <div class="task mktg">
+            <div class="task-icon">📰</div>
+            <div class="task-text"><strong>Tech media outreach: Roar.lk, Readme.lk</strong><span>Press release: "Sri Lankan startup Gameon reaches 20K users"</span></div>
+            <div class="task-owner">PR</div>
+          </div>
+          <div class="task mktg">
+            <div class="task-icon">🔄</div>
+            <div class="task-text"><strong>Mid-tier influencer second wave posts (5 creators)</strong><span>Second post focused on "I've been playing 2 weeks — here's my earnings"</span></div>
+            <div class="task-owner">MARKETING</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 4 -->
+      <div class="week-block">
+        <div class="week-header">
+          <div class="week-label">WEEK 4</div>
+          <div class="week-title">⚡ Tournament Fever & Web3 Hook</div>
+          <div class="week-dates">Apr 1–7, 2026</div>
+          <div class="week-target">Target: +8,000 → 31,000</div>
+        </div>
+        <div class="task-list">
+          <div class="task community">
+            <div class="task-icon">🏆</div>
+            <div class="task-text"><strong>"Top 100 Sri Lanka Gamers" Leaderboard launch</strong><span>Massive PR event. Livestreamed. Shared on all partner pages.</span></div>
+            <div class="task-owner">EVENTS</div>
+          </div>
+          <div class="task content">
+            <div class="task-icon">🪙</div>
+            <div class="task-text"><strong>GON Token airdrop campaign teaser</strong><span>"Hold GON, earn more." Telegram + Discord campaign targeting crypto community</span></div>
+            <div class="task-owner">WEB3</div>
+          </div>
+          <div class="task paid">
+            <div class="task-icon">💰</div>
+            <div class="task-text"><strong>Ad budget surge: $2,000 this week alone</strong><span>April 1 is ideal for new quarter ad auction dynamics. More reach, lower CPC.</span></div>
+            <div class="task-owner">PAID ADS</div>
+          </div>
+          <div class="task mktg">
+            <div class="task-icon">🤝</div>
+            <div class="task-text"><strong>Partner with SLGA (Sri Lanka Gamers Association)</strong><span>Official partnership announcement. Co-branded tournament.</span></div>
+            <div class="task-owner">BIZ DEV</div>
+          </div>
+          <div class="task community">
+            <div class="task-icon">🎓</div>
+            <div class="task-text"><strong>University Campus Championship — Week 1 matches</strong><span>5 campuses. Streaming on Facebook Gaming. Massive organic reach.</span></div>
+            <div class="task-owner">EVENTS</div>
+          </div>
+          <div class="task ops">
+            <div class="task-icon">📊</div>
+            <div class="task-text"><strong>Active user analysis & re-engagement push</strong><span>Users inactive 7+ days get personalised push/email with special offer</span></div>
+            <div class="task-owner">ANALYTICS</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 5 -->
+      <div class="week-block">
+        <div class="week-header">
+          <div class="week-label">WEEK 5</div>
+          <div class="week-title">📊 Optimize & Double Down</div>
+          <div class="week-dates">Apr 8–14, 2026</div>
+          <div class="week-target">Target: +7,000 → 38,000</div>
+        </div>
+        <div class="task-list">
+          <div class="task paid">
+            <div class="task-icon">🔬</div>
+            <div class="task-text"><strong>Full channel performance audit</strong><span>Which channel has lowest CAC? Double its budget. Cut the worst 2.</span></div>
+            <div class="task-owner">GROWTH</div>
+          </div>
+          <div class="task mktg">
+            <div class="task-icon">🆕</div>
+            <div class="task-text"><strong>Launch 3 new ad creative batches</strong><span>New angles: "Proof of payout" and "Beginner's first win" testimonials</span></div>
+            <div class="task-owner">CREATIVE</div>
+          </div>
+          <div class="task community">
+            <div class="task-icon">💌</div>
+            <div class="task-text"><strong>Email/push re-engagement for non-active users</strong><span>Segment: played once but inactive. Offer: 3x rewards if they return this week.</span></div>
+            <div class="task-owner">CRM</div>
+          </div>
+          <div class="task mktg">
+            <div class="task-icon">📱</div>
+            <div class="task-text"><strong>3rd wave influencer content</strong><span>Focused on "30-day update" — creators share their total earnings after a month</span></div>
+            <div class="task-owner">MARKETING</div>
+          </div>
+          <div class="task ops">
+            <div class="task-icon">🎮</div>
+            <div class="task-text"><strong>New game mode / feature timed release</strong><span>If any new feature is ready, launch this week for max PR impact</span></div>
+            <div class="task-owner">PRODUCT</div>
+          </div>
+          <div class="task community">
+            <div class="task-icon">🏅</div>
+            <div class="task-text"><strong>Referral leaderboard Week 4 winner announced</strong><span>Prize payout live. Share widely. Celebrates top community advocates.</span></div>
+            <div class="task-owner">COMMUNITY</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 6 -->
+      <div class="week-block">
+        <div class="week-header">
+          <div class="week-label">WEEK 6</div>
+          <div class="week-title">🏁 Final Sprint Push</div>
+          <div class="week-dates">Apr 15–21, 2026</div>
+          <div class="week-target">Target: +6,000 → 44,000</div>
+        </div>
+        <div class="task-list">
+          <div class="task paid">
+            <div class="task-icon">🚨</div>
+            <div class="task-text"><strong>Emergency budget reserve deployed ($1,500)</strong><span>All remaining reserve pushed into top 2 ad channels</span></div>
+            <div class="task-owner">PAID ADS</div>
+          </div>
+          <div class="task mktg">
+            <div class="task-icon">📣</div>
+            <div class="task-text"><strong>"48K Users" PR blast — momentum story</strong><span>Share milestones publicly to generate FOMO. "Sri Lanka's fastest growing gaming app."</span></div>
+            <div class="task-owner">PR</div>
+          </div>
+          <div class="task community">
+            <div class="task-icon">🏆</div>
+            <div class="task-text"><strong>University Championship Finals (streaming event)</strong><span>Grand final. LKR 50K prize. Max viewership push.</span></div>
+            <div class="task-owner">EVENTS</div>
+          </div>
+          <div class="task content">
+            <div class="task-icon">🎬</div>
+            <div class="task-text"><strong>Documentary-style "Month 1 in numbers" video</strong><span>Gameon team shares growth story. Authentic content drives signups.</span></div>
+            <div class="task-owner">CREATIVE</div>
+          </div>
+          <div class="task mktg">
+            <div class="task-icon">🎁</div>
+            <div class="task-text"><strong>"Last chance April" limited bonus event</strong><span>Sign up before April 30 = 200 GON welcome bonus (doubles normal welcome)</span></div>
+            <div class="task-owner">GROWTH</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 7 -->
+      <div class="week-block">
+        <div class="week-header">
+          <div class="week-label">WEEK 7</div>
+          <div class="week-title">🎯 Cross the 50K Line</div>
+          <div class="week-dates">Apr 22–30, 2026</div>
+          <div class="week-target">TARGET: 50,000 ✅</div>
+        </div>
+        <div class="task-list">
+          <div class="task community">
+            <div class="task-icon">🚀</div>
+            <div class="task-text"><strong>All influencers post simultaneously (Apr 22)</strong><span>Coordinated "Gameon Day" content drop across all creators</span></div>
+            <div class="task-owner">MARKETING</div>
+          </div>
+          <div class="task paid">
+            <div class="task-icon">🎯</div>
+            <div class="task-text"><strong>Final ad push on best-performing audiences</strong><span>Lookalike audiences off existing users. High-intent targeting only.</span></div>
+            <div class="task-owner">PAID ADS</div>
+          </div>
+          <div class="task ops">
+            <div class="task-icon">🏆</div>
+            <div class="task-text"><strong>"50,000 User Celebration" in-app event</strong><span>Special tournament + bonus rewards unlocked at 50K milestone</span></div>
+            <div class="task-owner">PRODUCT</div>
+          </div>
+          <div class="task mktg">
+            <div class="task-icon">📊</div>
+            <div class="task-text"><strong>Daily tracking war room (Apr 25–30)</strong><span>Daily 9am team standup: user count vs target. Adjust in real time.</span></div>
+            <div class="task-owner">GROWTH</div>
+          </div>
+          <div class="task community">
+            <div class="task-icon">🌏</div>
+            <div class="task-text"><strong>Tease next market launch (UAE / India)</strong><span>Announce SEA expansion plans. Creates buzz + signals momentum.</span></div>
+            <div class="task-owner">MARKETING</div>
+          </div>
+          <div class="task ops">
+            <div class="task-icon">📝</div>
+            <div class="task-text"><strong>Full sprint retrospective + learnings doc</strong><span>Document every channel's CAC, conversion rate, and ROI for next market.</span></div>
+            <div class="task-owner">GROWTH</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:12px; display:flex; gap:16px; flex-wrap:wrap;">
+      <span class="pill pill-blue">⚙️ OPS / TECH</span>
+      <span class="pill pill-green">📢 MARKETING</span>
+      <span class="pill pill-gold">🎬 CONTENT / CREATIVE</span>
+      <span class="pill pill-red">💰 PAID ADS</span>
+      <span class="pill pill-purple">👥 COMMUNITY / BIZ DEV</span>
+    </div>
+  </div>
+</section>
+
+<!-- KPIs -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">— Performance Dashboard</div>
+    <h2>KPIs, <span class="accent">Targets & Guardrails</span></h2>
+    <p class="section-desc">Every metric tracked weekly. Red = intervention required. These are non-negotiable milestones for the internal team.</p>
+
+    <div style="overflow-x:auto;">
+      <table class="kpi-table">
+        <thead>
+          <tr>
+            <th>KPI</th>
+            <th>Week 2</th>
+            <th>Week 4</th>
+            <th>Week 7 (Final)</th>
+            <th>Priority</th>
+            <th>Owner</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="kpi-name">Total Registered Users</div></td>
+            <td><span class="kpi-target">15,000</span></td>
+            <td><span class="kpi-target">31,000</span></td>
+            <td><span class="kpi-target">50,000</span></td>
+            <td><span class="badge badge-critical">CRITICAL</span></td>
+            <td>Growth</td>
+          </tr>
+          <tr>
+            <td><div class="kpi-name">Monthly Active Users (MAU)</div></td>
+            <td><span class="kpi-target">1,800+</span></td>
+            <td><span class="kpi-target">3,500+</span></td>
+            <td><span class="kpi-target">5,000+</span></td>
+            <td><span class="badge badge-critical">CRITICAL</span></td>
+            <td>Product</td>
+          </tr>
+          <tr>
+            <td><div class="kpi-name">Active Rate (MAU / Total)</div></td>
+            <td><span class="kpi-target">≥ 12%</span></td>
+            <td><span class="kpi-target">≥ 11%</span></td>
+            <td><span class="kpi-target">≥ 10%</span></td>
+            <td><span class="badge badge-critical">CRITICAL</span></td>
+            <td>Product</td>
+          </tr>
+          <tr>
+            <td><div class="kpi-name">Daily New Signups (avg)</div></td>
+            <td><span class="kpi-target">500/day</span></td>
+            <td><span class="kpi-target">1,000/day</span></td>
+            <td><span class="kpi-target">600/day</span></td>
+            <td><span class="badge badge-high">HIGH</span></td>
+            <td>Marketing</td>
+          </tr>
+          <tr>
+            <td><div class="kpi-name">Cost per Acquired User (CAC)</div></td>
+            <td><span class="kpi-target">≤ $0.50</span></td>
+            <td><span class="kpi-target">≤ $0.45</span></td>
+            <td><span class="kpi-target">≤ $0.42</span></td>
+            <td><span class="badge badge-high">HIGH</span></td>
+            <td>Paid Ads</td>
+          </tr>
+          <tr>
+            <td><div class="kpi-name">Referral K-Factor</div></td>
+            <td><span class="kpi-target">≥ 0.8</span></td>
+            <td><span class="kpi-target">≥ 1.0</span></td>
+            <td><span class="kpi-target">≥ 1.2</span></td>
+            <td><span class="badge badge-high">HIGH</span></td>
+            <td>Growth</td>
+          </tr>
+          <tr>
+            <td><div class="kpi-name">7-Day Retention Rate</div></td>
+            <td><span class="kpi-target">≥ 30%</span></td>
+            <td><span class="kpi-target">≥ 35%</span></td>
+            <td><span class="kpi-target">≥ 40%</span></td>
+            <td><span class="badge badge-high">HIGH</span></td>
+            <td>Product</td>
+          </tr>
+          <tr>
+            <td><div class="kpi-name">Influencer Referral Signups</div></td>
+            <td><span class="kpi-target">2,000</span></td>
+            <td><span class="kpi-target">8,000</span></td>
+            <td><span class="kpi-target">15,000+</span></td>
+            <td><span class="badge badge-med">MED</span></td>
+            <td>Marketing</td>
+          </tr>
+          <tr>
+            <td><div class="kpi-name">Tournament Participants</div></td>
+            <td><span class="kpi-target">300+</span></td>
+            <td><span class="kpi-target">1,500+</span></td>
+            <td><span class="kpi-target">3,000+</span></td>
+            <td><span class="badge badge-med">MED</span></td>
+            <td>Events</td>
+          </tr>
+          <tr>
+            <td><div class="kpi-name">Total Platform Transactions ($)</div></td>
+            <td><span class="kpi-target">$35K+</span></td>
+            <td><span class="kpi-target">$80K+</span></td>
+            <td><span class="kpi-target">$150K+</span></td>
+            <td><span class="badge badge-med">MED</span></td>
+            <td>Finance</td>
+          </tr>
+          <tr>
+            <td><div class="kpi-name">Ad Click-Through Rate (CTR)</div></td>
+            <td><span class="kpi-target">≥ 2.5%</span></td>
+            <td><span class="kpi-target">≥ 2.8%</span></td>
+            <td><span class="kpi-target">≥ 3.0%</span></td>
+            <td><span class="badge badge-low">MONITOR</span></td>
+            <td>Paid Ads</td>
+          </tr>
+          <tr>
+            <td><div class="kpi-name">Community Page Engagement</div></td>
+            <td><span class="kpi-target">500 comments</span></td>
+            <td><span class="kpi-target">2,000 total</span></td>
+            <td><span class="kpi-target">5,000+</span></td>
+            <td><span class="badge badge-low">MONITOR</span></td>
+            <td>Community</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert">
+      <strong>⚠️ RED ALERT PROTOCOL</strong><br>
+      If weekly signup targets are missed by 20%+ for 2 consecutive days, trigger the emergency response: (1) Double the paid ad budget on best-performing set, (2) Activate 5 emergency micro-influencer posts within 48 hours, (3) Run a flash 24-hour "double GON bonus" offer. Growth manager reviews daily 9am.
+    </div>
+  </div>
+</section>
+
+<!-- FINANCIAL TARGETS -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">— Revenue Model</div>
+    <h2>Financial <span class="accent">Targets</span> Linked to Growth</h2>
+    <p class="section-desc">User growth must translate to transaction volume. Based on Gameon's 5–10% rake model and current avg transaction data.</p>
+
+    <div class="financial-grid">
+      <div class="fin-card">
+        <div class="fin-label">Projected MAU at 50K</div>
+        <div class="fin-value">5,000+</div>
+        <div class="fin-basis">At 10% active rate. 5,000 players transacting monthly.</div>
+      </div>
+      <div class="fin-card">
+        <div class="fin-label">Avg Monthly Spend per User</div>
+        <div class="fin-value">$7.50</div>
+        <div class="fin-basis">LKR ~2,700. Assumes 3–5 games/week avg stake.</div>
+      </div>
+      <div class="fin-card">
+        <div class="fin-label">Monthly GMV (Gross Volume)</div>
+        <div class="fin-value">$37,500</div>
+        <div class="fin-basis">5,000 active × $7.50 avg. By end of April.</div>
+      </div>
+      <div class="fin-card">
+        <div class="fin-label">Platform Revenue (5–10% rake)</div>
+        <div class="fin-value">$2,800+</div>
+        <div class="fin-basis">At 7.5% blended rake on $37,500 GMV.</div>
+      </div>
+      <div class="fin-card">
+        <div class="fin-label">Annualised Revenue Run-Rate</div>
+        <div class="fin-value">$34K+</div>
+        <div class="fin-basis">From Sri Lanka alone at April run rate. Scales 250%+ M2M.</div>
+      </div>
+      <div class="fin-card">
+        <div class="fin-label">Campaign ROI</div>
+        <div class="fin-value">4.5x+</div>
+        <div class="fin-basis">$18K spend → $37,500 GMV month one, LTV projections beyond.</div>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top:24px;">
+      <div class="success-box">
+        <strong style="color:var(--neon); font-family:'Orbitron',monospace; font-size:12px; letter-spacing:2px;">ACTIVE USER RETENTION LEVERS</strong><br><br>
+        To maintain 10%+ active rate: daily login streak bonuses (7-day = 2x earnings), weekly tournaments (every Friday), push notifications on friend activity, "Your friend just won LKR 2,000!" alerts, monthly big prize event, and GON token staking rewards for consistent players.
+      </div>
+      <div class="success-box">
+        <strong style="color:var(--neon2); font-family:'Orbitron',monospace; font-size:12px; letter-spacing:2px;">FINANCIAL MILESTONE GATES</strong><br><br>
+        Week 2: $35K cumulative transactions ✓<br>
+        Week 4: $80K cumulative transactions ✓<br>
+        Week 7: $150K+ cumulative transactions ✓<br>
+        These prove PMF to investors and unlock next funding milestone.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM ASSIGNMENTS -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">— Internal Team</div>
+    <h2>Team <span class="accent">Ownership Map</span></h2>
+    <p class="section-desc">Every task has one DRI (Directly Responsible Individual). No shared ownership — one person is accountable for each track.</p>
+    <div class="activation-grid">
+      <div class="activation-card">
+        <div class="activation-icon">📊</div>
+        <div class="activation-title">Growth Manager</div>
+        <div class="activation-desc">Daily dashboard review. Weekly target accountability. Red alert activation. Sprint retrospectives. Owns the 50K number.</div>
+      </div>
+      <div class="activation-card">
+        <div class="activation-icon">💰</div>
+        <div class="activation-title">Paid Ads Lead</div>
+        <div class="activation-desc">Facebook / TikTok / IG campaigns. Daily bid management. Creative testing. Owns CAC ≤ $0.42 target. Reports to Growth Manager.</div>
+      </div>
+      <div class="activation-card">
+        <div class="activation-icon">🤝</div>
+        <div class="activation-title">Partnerships Lead</div>
+        <div class="activation-desc">Community page contracts. Influencer outreach & briefs. Streamer deals. University club relationships. Biz Dev + Community.</div>
+      </div>
+      <div class="activation-card">
+        <div class="activation-icon">🎬</div>
+        <div class="activation-title">Creative Lead</div>
+        <div class="activation-desc">Ad creatives, influencer briefs, tournament graphics, social content calendar, win-share cards, TikTok challenge concepts.</div>
+      </div>
+      <div class="activation-card">
+        <div class="activation-icon">⚙️</div>
+        <div class="activation-title">Tech Lead</div>
+        <div class="activation-desc">Referral system, analytics tracking, win-share card generation, push notifications, daily signup counter. Must be live by Week 1.</div>
+      </div>
+      <div class="activation-card">
+        <div class="activation-icon">🏆</div>
+        <div class="activation-title">Events Lead</div>
+        <div class="activation-desc">Tournament scheduling, prize pool management, university championship coordination, live streaming logistics, winner announcements.</div>
+      </div>
+    </div>
+    <div class="alert" style="margin-top:24px">
+      <strong>📅 DAILY STANDUP REQUIRED</strong><br>
+      Every morning at 9:00 AM (SL Time): Each lead reports (1) yesterday's number vs target, (2) today's top 3 actions, (3) any blockers. Growth Manager sends daily "war room" update to leadership. No exceptions during the sprint.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div style="font-family:'Orbitron',monospace; font-size:16px; color:var(--neon); margin-bottom:12px;">GAMEON WORLD — GROWTH PLAYBOOK v1.0</div>
+    <div>Sri Lanka Sprint · March 11 – April 30, 2026 · Confidential Internal Document</div>
+    <div style="margin-top:8px;"><span>gameonworld.ai</span> · Prepared by Growth Strategy · Document date: March 2026</div>
+  </div>
+</footer>
+
+</body>
+</html>
