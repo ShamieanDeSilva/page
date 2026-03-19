@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gameon — Breakeven Scenario Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#06090f;--bg2:#0d1117;--bg3:#161b22;--bg4:#21262d;--bg5:#30363d;
+  --text:#e6edf3;--text2:#8b949e;--text3:#484f58;
+  --cyan:#00e5ff;--cyan2:#00b8d4;--cyan-g:rgba(0,229,255,0.08);--cyan-b:rgba(0,229,255,0.15);
+  --green:#2dcc70;--green-g:rgba(45,204,112,0.08);
+  --amber:#f0a030;--amber-g:rgba(240,160,48,0.08);
+  --pink:#e84393;--pink-g:rgba(232,67,147,0.08);
+  --red:#e74c3c;--red-g:rgba(231,76,60,0.12);
+  --font:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased}
+
+.app{max-width:1100px;margin:0 auto;padding:32px 24px 64px}
+
+.hero{text-align:center;margin-bottom:40px}
+.hero h1{font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:6px}
+.hero h1 span{background:linear-gradient(135deg,var(--cyan),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--text2);font-size:15px;font-weight:300}
+
+/* Breakeven Meter */
+.meter{background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:28px 32px;margin-bottom:32px;position:relative;overflow:hidden}
+.meter::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--green),var(--amber))}
+.meter-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
+.meter-label{font-size:13px;color:var(--text2);font-weight:400}
+.meter-amount{font-family:var(--mono);font-size:36px;font-weight:700;line-height:1}
+.meter-amount .target{font-size:18px;color:var(--text3);font-weight:400}
+.meter-status{text-align:right}
+.meter-status .pct{font-family:var(--mono);font-size:28px;font-weight:700}
+.meter-status .tag{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;margin-top:4px}
+.tag-danger{background:var(--red-g);color:var(--red)}
+.tag-warning{background:var(--amber-g);color:var(--amber)}
+.tag-success{background:var(--green-g);color:var(--green)}
+.track{height:24px;background:var(--bg4);border-radius:12px;overflow:hidden;position:relative}
+.fill{height:100%;border-radius:12px;transition:width 0.5s cubic-bezier(0.4,0,0.2,1);min-width:2px}
+.track-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:11px;font-weight:600;color:var(--text);text-shadow:0 1px 4px rgba(0,0,0,0.6)}
+.meter-footer{display:flex;gap:32px;margin-top:14px;font-size:12px;color:var(--text3)}
+.meter-footer strong{color:var(--text2);font-weight:500}
+
+/* Revenue Pills */
+.rev-pills{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+.pill{background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden}
+.pill::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.pill.p-total::before{background:var(--cyan)}
+.pill.p-pred::before{background:#3b82f6}
+.pill.p-tour::before{background:var(--green)}
+.pill.p-pvp::before{background:var(--pink)}
+.pill-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;font-weight:500}
+.pill-val{font-family:var(--mono);font-size:22px;font-weight:700}
+.pill-sub{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* Sections */
+.panel{background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:28px;margin-bottom:20px}
+.panel-head{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.panel-dot{width:10px;height:10px;border-radius:50%}
+.panel-title{font-size:16px;font-weight:600}
+.panel-desc{font-size:12px;color:var(--text3);margin-left:auto;font-weight:300}
+
+/* Slider Rows */
+.slider-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 28px}
+.slider-row{display:flex;flex-direction:column;gap:6px}
+.slider-header{display:flex;justify-content:space-between;align-items:baseline}
+.slider-label{font-size:13px;color:var(--text2);font-weight:400}
+.slider-value{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--text);min-width:80px;text-align:right}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;background:var(--bg4);border-radius:3px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--cyan);border:2px solid var(--bg);cursor:pointer;box-shadow:0 0 10px rgba(0,229,255,0.3)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--cyan);border:2px solid var(--bg);cursor:pointer}
+.slider-hint{font-size:11px;color:var(--text3);font-weight:300}
+
+/* Computed summary row */
+.computed{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:10px;padding:12px 16px;margin-top:16px}
+.computed-label{font-size:13px;color:var(--text2)}
+.computed-val{font-family:var(--mono);font-size:16px;font-weight:600}
+
+/* Scenario Presets */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.preset-btn{padding:8px 16px;border-radius:8px;background:var(--bg3);border:1px solid rgba(255,255,255,0.06);color:var(--text2);font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s}
+.preset-btn:hover{border-color:var(--cyan-b);color:var(--text)}
+.preset-btn.active{background:var(--cyan-g);border-color:var(--cyan-b);color:var(--cyan)}
+
+/* Breakdown table */
+.breakdown{width:100%;border-collapse:collapse;margin-top:16px}
+.breakdown th{text-align:left;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-weight:500}
+.breakdown th:last-child{text-align:right}
+.breakdown td{padding:10px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04)}
+.breakdown td:last-child{text-align:right;font-family:var(--mono);font-weight:600}
+.breakdown .stream-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px}
+.breakdown tfoot td{border-top:2px solid rgba(255,255,255,0.1);font-weight:700;font-size:14px;padding-top:12px}
+
+/* Insights */
+.insights{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:20px}
+.insight{background:var(--bg3);border-radius:10px;padding:14px 16px}
+.insight-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.insight-val{font-family:var(--mono);font-size:18px;font-weight:600}
+.insight-sub{font-size:11px;color:var(--text3);margin-top:2px}
+
+@media(max-width:768px){
+  .rev-pills{grid-template-columns:1fr 1fr}
+  .slider-grid{grid-template-columns:1fr}
+  .insights{grid-template-columns:1fr}
+  .meter-top{flex-direction:column;align-items:flex-start;gap:8px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="hero">
+    <h1><span>Gameon</span> breakeven planner</h1>
+    <p>Adjust the levers below to find the path to $20,000/month revenue</p>
+  </div>
+
+  <!-- BREAKEVEN METER -->
+  <div class="meter">
+    <div class="meter-top">
+      <div>
+        <div class="meter-label">Monthly revenue</div>
+        <div class="meter-amount"><span id="totalRev">$0</span> <span class="target">/ $20,000</span></div>
+      </div>
+      <div class="meter-status">
+        <div class="pct" id="pctText">0%</div>
+        <div><span class="tag" id="statusTag">Below target</span></div>
+      </div>
+    </div>
+    <div class="track">
+      <div class="fill" id="meterFill" style="width:0%;background:linear-gradient(90deg,#3b82f6,var(--cyan))"></div>
+    </div>
+    <div class="meter-footer">
+      <span>Deficit: <strong id="deficitVal">$20,000</strong></span>
+      <span>Monthly GTV needed: <strong id="gtvVal">$0</strong></span>
+      <span>Blended take rate: <strong id="blendedRate">0%</strong></span>
+    </div>
+  </div>
+
+  <!-- REVENUE PILLS -->
+  <div class="rev-pills">
+    <div class="pill p-total"><div class="pill-label">Total revenue</div><div class="pill-val" id="pillTotal">$0</div><div class="pill-sub">All streams combined</div></div>
+    <div class="pill p-pred"><div class="pill-label">Predictions</div><div class="pill-val" id="pillPred">$0</div><div class="pill-sub" id="pillPredSub">2% of purse</div></div>
+    <div class="pill p-tour"><div class="pill-label">Tournaments</div><div class="pill-val" id="pillTour">$0</div><div class="pill-sub" id="pillTourSub">5% of purse</div></div>
+    <div class="pill p-pvp"><div class="pill-label">PvP games</div><div class="pill-val" id="pillPvp">$0</div><div class="pill-sub" id="pillPvpSub">5% of volume</div></div>
+  </div>
+
+  <!-- PRESET SCENARIOS -->
+  <div class="presets">
+    <span style="font-size:13px;color:var(--text3);line-height:36px;margin-right:4px;">Scenarios:</span>
+    <button class="preset-btn active" onclick="loadPreset('custom')">Custom</button>
+    <button class="preset-btn" onclick="loadPreset('predHeavy')">Prediction-heavy</button>
+    <button class="preset-btn" onclick="loadPreset('tourHeavy')">Tournament-heavy</button>
+    <button class="preset-btn" onclick="loadPreset('pvpHeavy')">PvP-heavy</button>
+    <button class="preset-btn" onclick="loadPreset('balanced')">Balanced</button>
+    <button class="preset-btn" onclick="loadPreset('bigEvents')">Big events + casual</button>
+    <button class="preset-btn" onclick="loadPreset('minimum')">Bare minimum</button>
+  </div>
+
+  <!-- SECTION 1: USER BASE -->
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-dot" style="background:var(--cyan)"></div>
+      <div class="panel-title">User base</div>
+      <div class="panel-desc">How many users and how engaged?</div>
+    </div>
+    <div class="slider-grid">
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Total registered users</span><span class="slider-value" id="v_totalUsers">10,000</span></div>
+        <input type="range" id="s_totalUsers" min="1000" max="100000" step="500" value="10000">
+        <div class="slider-hint">Your full user base (signed up)</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Active user ratio</span><span class="slider-value" id="v_activeRatio">20%</span></div>
+        <input type="range" id="s_activeRatio" min="5" max="50" step="1" value="20">
+        <div class="slider-hint">% that play at least once/month</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Sessions per active user / month</span><span class="slider-value" id="v_sessions">12</span></div>
+        <input type="range" id="s_sessions" min="1" max="60" step="1" value="12">
+        <div class="slider-hint">How many times each active user plays</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Avg wager per session</span><span class="slider-value" id="v_avgWager">$5</span></div>
+        <input type="range" id="s_avgWager" min="1" max="50" step="1" value="5">
+        <div class="slider-hint">Average entry fee per player per game</div>
+      </div>
+    </div>
+    <div class="computed">
+      <span class="computed-label">Active users</span><span class="computed-val" id="c_activeUsers">2,000</span>
+    </div>
+    <div class="computed" style="margin-top:8px">
+      <span class="computed-label">Total monthly sessions</span><span class="computed-val" id="c_totalSessions">24,000</span>
+    </div>
+    <div class="computed" style="margin-top:8px">
+      <span class="computed-label">Total user-driven GTV (all wagers)</span><span class="computed-val" id="c_userGTV">$120,000</span>
+    </div>
+  </div>
+
+  <!-- SECTION 2: PREDICTION EVENTS -->
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-dot" style="background:#3b82f6"></div>
+      <div class="panel-title">Prediction events</div>
+      <div class="panel-desc">Gameon net take: 2%</div>
+    </div>
+    <div class="slider-grid">
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Prediction events per month</span><span class="slider-value" id="v_predEvents">20</span></div>
+        <input type="range" id="s_predEvents" min="0" max="100" step="1" value="20">
+        <div class="slider-hint">Cricket matches, elections, sports, etc.</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Avg purse per event</span><span class="slider-value" id="v_predPurse">$5,000</span></div>
+        <input type="range" id="s_predPurse" min="100" max="100000" step="100" value="5000">
+        <div class="slider-hint">Total pool collected per event</div>
+      </div>
+    </div>
+    <div class="computed">
+      <span class="computed-label">Total prediction purse</span><span class="computed-val" id="c_predTotal">$100,000</span>
+    </div>
+    <div class="computed" style="margin-top:8px">
+      <span class="computed-label">Gameon revenue (2%)</span><span class="computed-val" id="c_predRev" style="color:#3b82f6">$2,000</span>
+    </div>
+  </div>
+
+  <!-- SECTION 3: TOURNAMENTS -->
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-dot" style="background:var(--green)"></div>
+      <div class="panel-title">Tournaments</div>
+      <div class="panel-desc">Gameon net take: 5%</div>
+    </div>
+    <div class="slider-grid">
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Tournaments per month</span><span class="slider-value" id="v_tourCount">8</span></div>
+        <input type="range" id="s_tourCount" min="0" max="50" step="1" value="8">
+        <div class="slider-hint">Weekly, weekend, or special events</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Avg purse per tournament</span><span class="slider-value" id="v_tourPurse">$8,000</span></div>
+        <input type="range" id="s_tourPurse" min="100" max="100000" step="100" value="8000">
+        <div class="slider-hint">Total prize pool per tournament</div>
+      </div>
+    </div>
+    <div class="computed">
+      <span class="computed-label">Total tournament purse</span><span class="computed-val" id="c_tourTotal">$64,000</span>
+    </div>
+    <div class="computed" style="margin-top:8px">
+      <span class="computed-label">Gameon revenue (5%)</span><span class="computed-val" id="c_tourRev" style="color:var(--green)">$3,200</span>
+    </div>
+  </div>
+
+  <!-- SECTION 4: PVP GAMES -->
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-dot" style="background:var(--pink)"></div>
+      <div class="panel-title">PvP games</div>
+      <div class="panel-desc">Gameon net take: 5%</div>
+    </div>
+    <div class="slider-grid">
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Total PvP matches / month</span><span class="slider-value" id="v_pvpMatches">5,000</span></div>
+        <input type="range" id="s_pvpMatches" min="0" max="50000" step="100" value="5000">
+        <div class="slider-hint">Individual 1v1 matches across all games</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-header"><span class="slider-label">Avg match size (both sides)</span><span class="slider-value" id="v_pvpSize">$10</span></div>
+        <input type="range" id="s_pvpSize" min="2" max="100" step="1" value="10">
+        <div class="slider-hint">Combined entry of both players</div>
+      </div>
+    </div>
+    <div class="computed">
+      <span class="computed-label">Total PvP volume</span><span class="computed-val" id="c_pvpTotal">$50,000</span>
+    </div>
+    <div class="computed" style="margin-top:8px">
+      <span class="computed-label">Gameon revenue (5%)</span><span class="computed-val" id="c_pvpRev" style="color:var(--pink)">$2,500</span>
+    </div>
+  </div>
+
+  <!-- FULL BREAKDOWN -->
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-dot" style="background:var(--amber)"></div>
+      <div class="panel-title">Full breakeven breakdown</div>
+    </div>
+    <table class="breakdown">
+      <thead><tr><th>Stream</th><th>GTV / Purse</th><th>Take rate</th><th>Revenue</th></tr></thead>
+      <tbody id="breakdownBody"></tbody>
+      <tfoot id="breakdownFoot"></tfoot>
+    </table>
+
+    <div class="insights">
+      <div class="insight">
+        <div class="insight-label">Revenue per active user</div>
+        <div class="insight-val" id="insARPU">$0</div>
+        <div class="insight-sub">Monthly ARPU</div>
+      </div>
+      <div class="insight">
+        <div class="insight-label">Revenue per session</div>
+        <div class="insight-val" id="insRPS">$0</div>
+        <div class="insight-sub">Avg revenue generated per game</div>
+      </div>
+      <div class="insight">
+        <div class="insight-label">Daily revenue needed</div>
+        <div class="insight-val" id="insDailyGap">$0</div>
+        <div class="insight-sub" id="insDailyGapSub">To close the deficit</div>
+      </div>
+      <div class="insight">
+        <div class="insight-label">Annual run rate (ARR)</div>
+        <div class="insight-val" id="insARR">$0</div>
+        <div class="insight-sub">At current monthly revenue × 12</div>
+      </div>
+      <div class="insight">
+        <div class="insight-label">Months to breakeven</div>
+        <div class="insight-val" id="insMonths">—</div>
+        <div class="insight-sub" id="insMonthsSub">At this configuration</div>
+      </div>
+      <div class="insight">
+        <div class="insight-label">Users still needed</div>
+        <div class="insight-val" id="insUsersGap">0</div>
+        <div class="insight-sub">From current 7,000 registered</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const T = 20000;
+const CURRENT_USERS = 7000;
+
+const sliders = {
+  totalUsers: { el: 's_totalUsers', out: 'v_totalUsers', fmt: v => v.toLocaleString() },
+  activeRatio: { el: 's_activeRatio', out: 'v_activeRatio', fmt: v => v + '%' },
+  sessions: { el: 's_sessions', out: 'v_sessions', fmt: v => v },
+  avgWager: { el: 's_avgWager', out: 'v_avgWager', fmt: v => '$' + v },
+  predEvents: { el: 's_predEvents', out: 'v_predEvents', fmt: v => v },
+  predPurse: { el: 's_predPurse', out: 'v_predPurse', fmt: v => '$' + Math.round(v).toLocaleString() },
+  tourCount: { el: 's_tourCount', out: 'v_tourCount', fmt: v => v },
+  tourPurse: { el: 's_tourPurse', out: 'v_tourPurse', fmt: v => '$' + Math.round(v).toLocaleString() },
+  pvpMatches: { el: 's_pvpMatches', out: 'v_pvpMatches', fmt: v => Math.round(v).toLocaleString() },
+  pvpSize: { el: 's_pvpSize', out: 'v_pvpSize', fmt: v => '$' + v },
+};
+
+function val(key) { return +document.getElementById(sliders[key].el).value; }
+function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+
+const presets = {
+  custom: null,
+  predHeavy: { totalUsers:25000,activeRatio:20,sessions:15,avgWager:5,predEvents:50,predPurse:15000,tourCount:4,tourPurse:5000,pvpMatches:2000,pvpSize:8 },
+  tourHeavy: { totalUsers:15000,activeRatio:20,sessions:10,avgWager:8,predEvents:10,predPurse:3000,tourCount:20,tourPurse:15000,pvpMatches:3000,pvpSize:10 },
+  pvpHeavy: { totalUsers:30000,activeRatio:25,sessions:20,avgWager:5,predEvents:10,predPurse:2000,tourCount:4,tourPurse:5000,pvpMatches:20000,pvpSize:12 },
+  balanced: { totalUsers:20000,activeRatio:20,sessions:12,avgWager:6,predEvents:25,predPurse:8000,tourCount:10,tourPurse:10000,pvpMatches:8000,pvpSize:10 },
+  bigEvents: { totalUsers:12000,activeRatio:20,sessions:8,avgWager:10,predEvents:10,predPurse:40000,tourCount:5,tourPurse:30000,pvpMatches:3000,pvpSize:8 },
+  minimum: { totalUsers:28000,activeRatio:20,sessions:10,avgWager:5,predEvents:30,predPurse:10000,tourCount:8,tourPurse:12500,pvpMatches:5000,pvpSize:10 },
+};
+
+function loadPreset(name) {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  if (!presets[name]) return;
+  const p = presets[name];
+  Object.keys(p).forEach(k => {
+    const el = document.getElementById(sliders[k].el);
+    if (el) el.value = p[k];
+  });
+  update();
+}
+
+function update() {
+  // Read values
+  const totalUsers = val('totalUsers');
+  const activeRatio = val('activeRatio') / 100;
+  const sessions = val('sessions');
+  const avgWager = val('avgWager');
+  const predEvents = val('predEvents');
+  const predPurse = val('predPurse');
+  const tourCount = val('tourCount');
+  const tourPurse = val('tourPurse');
+  const pvpMatches = val('pvpMatches');
+  const pvpSize = val('pvpSize');
+
+  // Update displayed values
+  Object.keys(sliders).forEach(k => {
+    const s = sliders[k];
+    document.getElementById(s.out).textContent = s.fmt(+document.getElementById(s.el).value);
+  });
+
+  // Computed: user base
+  const activeUsers = Math.round(totalUsers * activeRatio);
+  const totalSessions = activeUsers * sessions;
+  const userGTV = totalSessions * avgWager * 2; // both sides of match
+  document.getElementById('c_activeUsers').textContent = activeUsers.toLocaleString();
+  document.getElementById('c_totalSessions').textContent = totalSessions.toLocaleString();
+  document.getElementById('c_userGTV').textContent = fmt(userGTV);
+
+  // Computed: predictions
+  const predTotal = predEvents * predPurse;
+  const predRev = predTotal * 0.02;
+  document.getElementById('c_predTotal').textContent = fmt(predTotal);
+  document.getElementById('c_predRev').textContent = fmt(predRev);
+
+  // Computed: tournaments
+  const tourTotal = tourCount * tourPurse;
+  const tourRev = tourTotal * 0.05;
+  document.getElementById('c_tourTotal').textContent = fmt(tourTotal);
+  document.getElementById('c_tourRev').textContent = fmt(tourRev);
+
+  // Computed: PvP
+  const pvpTotal = pvpMatches * pvpSize;
+  const pvpRev = pvpTotal * 0.05;
+  document.getElementById('c_pvpTotal').textContent = fmt(pvpTotal);
+  document.getElementById('c_pvpRev').textContent = fmt(pvpRev);
+
+  // Revenue totals
+  const totalRev = predRev + tourRev + pvpRev;
+  const totalGTV = predTotal + tourTotal + pvpTotal;
+  const blended = totalGTV > 0 ? (totalRev / totalGTV * 100) : 0;
+
+  // Meter
+  const pct = Math.min(100, (totalRev / T) * 100);
+  document.getElementById('totalRev').textContent = fmt(totalRev);
+  document.getElementById('pctText').textContent = Math.round(pct) + '%';
+  const fill = document.getElementById('meterFill');
+  fill.style.width = pct + '%';
+  if (pct >= 100) {
+    fill.style.background = 'linear-gradient(90deg, var(--green), var(--cyan))';
+  } else if (pct >= 70) {
+    fill.style.background = 'linear-gradient(90deg, var(--amber), var(--cyan))';
+  } else {
+    fill.style.background = 'linear-gradient(90deg, #3b82f6, var(--cyan))';
+  }
+
+  const tag = document.getElementById('statusTag');
+  if (pct >= 100) { tag.textContent = 'Breakeven!'; tag.className = 'tag tag-success'; }
+  else if (pct >= 70) { tag.textContent = 'Almost there'; tag.className = 'tag tag-warning'; }
+  else { tag.textContent = 'Below target'; tag.className = 'tag tag-danger'; }
+
+  const deficit = Math.max(0, T - totalRev);
+  document.getElementById('deficitVal').textContent = fmt(deficit);
+  document.getElementById('gtvVal').textContent = fmt(totalGTV);
+  document.getElementById('blendedRate').textContent = blended.toFixed(1) + '%';
+
+  // Pills
+  document.getElementById('pillTotal').textContent = fmt(totalRev);
+  document.getElementById('pillPred').textContent = fmt(predRev);
+  document.getElementById('pillTour').textContent = fmt(tourRev);
+  document.getElementById('pillPvp').textContent = fmt(pvpRev);
+  document.getElementById('pillPredSub').textContent = fmt(predTotal) + ' purse × 2%';
+  document.getElementById('pillTourSub').textContent = fmt(tourTotal) + ' purse × 5%';
+  document.getElementById('pillPvpSub').textContent = fmt(pvpTotal) + ' vol × 5%';
+
+  // Breakdown table
+  const body = document.getElementById('breakdownBody');
+  body.innerHTML = `
+    <tr><td><span class="stream-dot" style="background:#3b82f6"></span>Prediction events</td><td>${fmt(predTotal)}</td><td>2%</td><td style="color:#3b82f6">${fmt(predRev)}</td></tr>
+    <tr><td><span class="stream-dot" style="background:var(--green)"></span>Tournaments</td><td>${fmt(tourTotal)}</td><td>5%</td><td style="color:var(--green)">${fmt(tourRev)}</td></tr>
+    <tr><td><span class="stream-dot" style="background:var(--pink)"></span>PvP games</td><td>${fmt(pvpTotal)}</td><td>5%</td><td style="color:var(--pink)">${fmt(pvpRev)}</td></tr>
+  `;
+  document.getElementById('breakdownFoot').innerHTML = `
+    <tr><td>Total</td><td>${fmt(totalGTV)}</td><td>${blended.toFixed(1)}%</td><td>${fmt(totalRev)}</td></tr>
+  `;
+
+  // Insights
+  const arpu = activeUsers > 0 ? totalRev / activeUsers : 0;
+  const rps = totalSessions > 0 ? totalRev / totalSessions : 0;
+  const dailyGap = deficit / 30;
+  const arr = totalRev * 12;
+  const usersGap = Math.max(0, totalUsers - CURRENT_USERS);
+
+  document.getElementById('insARPU').textContent = '$' + arpu.toFixed(2);
+  document.getElementById('insRPS').textContent = '$' + rps.toFixed(2);
+  document.getElementById('insDailyGap').textContent = fmt(dailyGap);
+  document.getElementById('insDailyGapSub').textContent = deficit <= 0 ? 'Target exceeded!' : 'To close the deficit';
+  document.getElementById('insARR').textContent = fmt(arr);
+  document.getElementById('insUsersGap').textContent = usersGap > 0 ? '+' + usersGap.toLocaleString() : 'Already there';
+
+  if (totalRev >= T) {
+    document.getElementById('insMonths').textContent = 'Now';
+    document.getElementById('insMonthsSub').textContent = 'You hit breakeven at these numbers';
+  } else {
+    document.getElementById('insMonths').textContent = '—';
+    document.getElementById('insMonthsSub').textContent = 'Increase levers to reach $20K';
+  }
+}
+
+// Bind all sliders
+Object.keys(sliders).forEach(k => {
+  document.getElementById(sliders[k].el).addEventListener('input', () => {
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.preset-btn').classList.add('active');
+    update();
+  });
+});
+
+update();
+</script>
+</body>
+</html>
