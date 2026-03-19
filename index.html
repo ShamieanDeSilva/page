@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gameon — Breakeven Scenario Planner</title>
+<title>Gameon — Breakeven & Operations Planner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -12,491 +12,644 @@
   --bg:#06090f;--bg2:#0d1117;--bg3:#161b22;--bg4:#21262d;--bg5:#30363d;
   --text:#e6edf3;--text2:#8b949e;--text3:#484f58;
   --cyan:#00e5ff;--cyan2:#00b8d4;--cyan-g:rgba(0,229,255,0.08);--cyan-b:rgba(0,229,255,0.15);
-  --green:#2dcc70;--green-g:rgba(45,204,112,0.08);
-  --amber:#f0a030;--amber-g:rgba(240,160,48,0.08);
-  --pink:#e84393;--pink-g:rgba(232,67,147,0.08);
+  --green:#2dcc70;--green-g:rgba(45,204,112,0.08);--green-b:rgba(45,204,112,0.15);
+  --amber:#f0a030;--amber-g:rgba(240,160,48,0.08);--amber-b:rgba(240,160,48,0.15);
+  --pink:#e84393;--pink-g:rgba(232,67,147,0.08);--pink-b:rgba(232,67,147,0.15);
   --red:#e74c3c;--red-g:rgba(231,76,60,0.12);
+  --blue:#3b82f6;--blue-g:rgba(59,130,246,0.08);--blue-b:rgba(59,130,246,0.15);
+  --purple:#a855f7;--purple-g:rgba(168,85,247,0.08);--purple-b:rgba(168,85,247,0.15);
   --font:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;
 }
 body{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased}
+.app{max-width:1100px;margin:0 auto;padding:32px 24px 80px}
 
-.app{max-width:1100px;margin:0 auto;padding:32px 24px 64px}
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:36px;height:36px;background:linear-gradient(135deg,var(--cyan),var(--blue));border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:var(--bg)}
+.logo-text{font-size:18px;font-weight:700;letter-spacing:-0.5px}
+.logo-text span{color:var(--cyan)}
+.tabs{display:flex;gap:4px;background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:4px}
+.tab{padding:8px 18px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;color:var(--text2);transition:all 0.2s;border:none;background:transparent;font-family:var(--font)}
+.tab.active{background:var(--bg4);color:var(--text)}
+.tab:hover:not(.active){color:var(--text)}
 
-.hero{text-align:center;margin-bottom:40px}
-.hero h1{font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:6px}
-.hero h1 span{background:linear-gradient(135deg,var(--cyan),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:var(--text2);font-size:15px;font-weight:300}
+/* SECTIONS */
+.page{display:none}.page.active{display:block}
 
-/* Breakeven Meter */
-.meter{background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:28px 32px;margin-bottom:32px;position:relative;overflow:hidden}
+/* METER */
+.meter{background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:24px 28px;margin-bottom:24px;position:relative;overflow:hidden}
 .meter::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--green),var(--amber))}
-.meter-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px}
-.meter-label{font-size:13px;color:var(--text2);font-weight:400}
-.meter-amount{font-family:var(--mono);font-size:36px;font-weight:700;line-height:1}
-.meter-amount .target{font-size:18px;color:var(--text3);font-weight:400}
-.meter-status{text-align:right}
-.meter-status .pct{font-family:var(--mono);font-size:28px;font-weight:700}
-.meter-status .tag{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;margin-top:4px}
-.tag-danger{background:var(--red-g);color:var(--red)}
-.tag-warning{background:var(--amber-g);color:var(--amber)}
-.tag-success{background:var(--green-g);color:var(--green)}
-.track{height:24px;background:var(--bg4);border-radius:12px;overflow:hidden;position:relative}
-.fill{height:100%;border-radius:12px;transition:width 0.5s cubic-bezier(0.4,0,0.2,1);min-width:2px}
-.track-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:11px;font-weight:600;color:var(--text);text-shadow:0 1px 4px rgba(0,0,0,0.6)}
-.meter-footer{display:flex;gap:32px;margin-top:14px;font-size:12px;color:var(--text3)}
-.meter-footer strong{color:var(--text2);font-weight:500}
+.meter-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px}
+.meter-amount{font-family:var(--mono);font-size:32px;font-weight:700}
+.meter-amount .of{font-size:16px;color:var(--text3);font-weight:400}
+.meter-pct{font-family:var(--mono);font-size:24px;font-weight:700;text-align:right}
+.tag{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600}
+.tag-r{background:var(--red-g);color:var(--red)}.tag-a{background:var(--amber-g);color:var(--amber)}.tag-g{background:var(--green-g);color:var(--green)}
+.track{height:22px;background:var(--bg4);border-radius:11px;overflow:hidden}
+.fill{height:100%;border-radius:11px;transition:width 0.5s cubic-bezier(0.4,0,0.2,1);min-width:2px}
+.meter-foot{display:flex;gap:28px;margin-top:12px;font-size:12px;color:var(--text3)}
+.meter-foot strong{color:var(--text2);font-weight:500}
 
-/* Revenue Pills */
-.rev-pills{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+/* GRID */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
 .pill{background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden}
 .pill::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
-.pill.p-total::before{background:var(--cyan)}
-.pill.p-pred::before{background:#3b82f6}
-.pill.p-tour::before{background:var(--green)}
-.pill.p-pvp::before{background:var(--pink)}
-.pill-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;font-weight:500}
-.pill-val{font-family:var(--mono);font-size:22px;font-weight:700}
+.pill-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px;font-weight:500}
+.pill-val{font-family:var(--mono);font-size:20px;font-weight:700}
 .pill-sub{font-size:11px;color:var(--text3);margin-top:2px}
 
-/* Sections */
-.panel{background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:28px;margin-bottom:20px}
-.panel-head{display:flex;align-items:center;gap:10px;margin-bottom:22px}
-.panel-dot{width:10px;height:10px;border-radius:50%}
-.panel-title{font-size:16px;font-weight:600}
-.panel-desc{font-size:12px;color:var(--text3);margin-left:auto;font-weight:300}
+/* PANELS */
+.panel{background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:24px;margin-bottom:20px}
+.ph{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.pd{width:10px;height:10px;border-radius:50%}
+.pt{font-size:15px;font-weight:600}
+.pdesc{font-size:12px;color:var(--text3);margin-left:auto;font-weight:300}
 
-/* Slider Rows */
-.slider-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 28px}
-.slider-row{display:flex;flex-direction:column;gap:6px}
-.slider-header{display:flex;justify-content:space-between;align-items:baseline}
-.slider-label{font-size:13px;color:var(--text2);font-weight:400}
-.slider-value{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--text);min-width:80px;text-align:right}
-input[type=range]{-webkit-appearance:none;width:100%;height:6px;background:var(--bg4);border-radius:3px;outline:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--cyan);border:2px solid var(--bg);cursor:pointer;box-shadow:0 0 10px rgba(0,229,255,0.3)}
-input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--cyan);border:2px solid var(--bg);cursor:pointer}
-.slider-hint{font-size:11px;color:var(--text3);font-weight:300}
+/* SLIDERS */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:14px 28px}
+.sr{display:flex;flex-direction:column;gap:5px}
+.sh{display:flex;justify-content:space-between;align-items:baseline}
+.sl{font-size:13px;color:var(--text2);font-weight:400}
+.sv{font-family:var(--mono);font-size:14px;font-weight:600;min-width:70px;text-align:right}
+input[type=range]{-webkit-appearance:none;width:100%;height:5px;background:var(--bg4);border-radius:3px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--cyan);border:2px solid var(--bg);cursor:pointer;box-shadow:0 0 8px rgba(0,229,255,0.25)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--cyan);border:2px solid var(--bg)}
+.hint{font-size:11px;color:var(--text3);font-weight:300}
 
-/* Computed summary row */
-.computed{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:10px;padding:12px 16px;margin-top:16px}
-.computed-label{font-size:13px;color:var(--text2)}
-.computed-val{font-family:var(--mono);font-size:16px;font-weight:600}
+/* COMPUTED */
+.cmp{display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:9px;padding:11px 15px;margin-top:12px}
+.cmp-l{font-size:13px;color:var(--text2)}.cmp-v{font-family:var(--mono);font-size:15px;font-weight:600}
 
-/* Scenario Presets */
-.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
-.preset-btn{padding:8px 16px;border-radius:8px;background:var(--bg3);border:1px solid rgba(255,255,255,0.06);color:var(--text2);font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s}
-.preset-btn:hover{border-color:var(--cyan-b);color:var(--text)}
-.preset-btn.active{background:var(--cyan-g);border-color:var(--cyan-b);color:var(--cyan)}
+/* PRESETS */
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.pre{padding:7px 14px;border-radius:7px;background:var(--bg3);border:1px solid rgba(255,255,255,0.06);color:var(--text2);font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;transition:all 0.2s}
+.pre:hover{border-color:var(--cyan-b);color:var(--text)}.pre.active{background:var(--cyan-g);border-color:var(--cyan-b);color:var(--cyan)}
 
-/* Breakdown table */
-.breakdown{width:100%;border-collapse:collapse;margin-top:16px}
-.breakdown th{text-align:left;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-weight:500}
-.breakdown th:last-child{text-align:right}
-.breakdown td{padding:10px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04)}
-.breakdown td:last-child{text-align:right;font-family:var(--mono);font-weight:600}
-.breakdown .stream-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px}
-.breakdown tfoot td{border-top:2px solid rgba(255,255,255,0.1);font-weight:700;font-size:14px;padding-top:12px}
+/* BREAKDOWN TABLE */
+.bt{width:100%;border-collapse:collapse;margin-top:14px}
+.bt th{text-align:left;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-weight:500}
+.bt th:last-child{text-align:right}
+.bt td{padding:9px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04)}
+.bt td:last-child{text-align:right;font-family:var(--mono);font-weight:600}
+.bt tfoot td{border-top:2px solid rgba(255,255,255,0.1);font-weight:700;padding-top:10px}
+.sdot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:8px}
 
-/* Insights */
-.insights{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:20px}
-.insight{background:var(--bg3);border-radius:10px;padding:14px 16px}
-.insight-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
-.insight-val{font-family:var(--mono);font-size:18px;font-weight:600}
-.insight-sub{font-size:11px;color:var(--text3);margin-top:2px}
+/* INSIGHTS */
+.ins{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.in{background:var(--bg3);border-radius:9px;padding:14px 15px}
+.in-l{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px}
+.in-v{font-family:var(--mono);font-size:17px;font-weight:600}
+.in-s{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* FUNNEL VIZ */
+.funnel{display:flex;flex-direction:column;gap:0;margin:20px 0}
+.funnel-step{display:flex;align-items:center;gap:16px;padding:14px 20px;position:relative}
+.funnel-step::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:2px;background:var(--bg4)}
+.funnel-step:first-child::before{top:50%}.funnel-step:last-child::before{bottom:50%}
+.funnel-dot{width:16px;height:16px;border-radius:50%;z-index:1;flex-shrink:0;border:2px solid var(--bg)}
+.funnel-content{flex:1;display:flex;justify-content:space-between;align-items:center;background:var(--bg3);border-radius:9px;padding:12px 16px}
+.funnel-name{font-size:13px;color:var(--text2)}
+.funnel-val{font-family:var(--mono);font-size:15px;font-weight:600}
+.funnel-rate{font-size:11px;color:var(--text3);margin-left:8px}
+
+/* CHANNEL CARDS */
+.ch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ch{background:var(--bg3);border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:16px;transition:border-color 0.2s}
+.ch:hover{border-color:rgba(255,255,255,0.1)}
+.ch-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.ch-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
+.ch-name{font-size:13px;font-weight:600}
+.ch-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}
+.ch-row label{color:var(--text3)}.ch-row span{color:var(--text2);font-family:var(--mono);font-weight:500}
+
+/* CAMPAIGN TABLE */
+.camp{width:100%;border-collapse:collapse}
+.camp th{text-align:left;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,0.06);font-weight:500}
+.camp td{padding:10px 4px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04)}
+.camp .mono{font-family:var(--mono);font-weight:500}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600}
+
+/* SECTION DIVIDER */
+.divider{display:flex;align-items:center;gap:12px;margin:36px 0 24px;font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;font-weight:600}
+.divider::after{content:'';flex:1;height:1px;background:var(--bg4)}
+
+/* ARROW CONNECTOR */
+.arrow-down{text-align:center;margin:8px 0;color:var(--text3);font-size:18px;opacity:0.4}
 
 @media(max-width:768px){
-  .rev-pills{grid-template-columns:1fr 1fr}
-  .slider-grid{grid-template-columns:1fr}
-  .insights{grid-template-columns:1fr}
-  .meter-top{flex-direction:column;align-items:flex-start;gap:8px}
+  .g4,.g3,.ch-grid{grid-template-columns:1fr 1fr}
+  .sg,.g2{grid-template-columns:1fr}
+  .ins{grid-template-columns:1fr}
+  .tabs{width:100%;overflow-x:auto}
 }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <div class="hero">
-    <h1><span>Gameon</span> breakeven planner</h1>
-    <p>Adjust the levers below to find the path to $20,000/month revenue</p>
+<div class="nav">
+  <div class="logo"><div class="logo-mark">G</div><div class="logo-text"><span>Gameon</span> operations planner</div></div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchPage('revenue',this)">Revenue breakeven</button>
+    <button class="tab" onclick="switchPage('marketing',this)">Marketing targets</button>
+    <button class="tab" onclick="switchPage('ops',this)">Operations plan</button>
+  </div>
+</div>
+
+<!-- ==================== PAGE 1: REVENUE ==================== -->
+<div class="page active" id="page-revenue">
+
+<div class="meter">
+  <div class="meter-row">
+    <div><div style="font-size:12px;color:var(--text3);margin-bottom:4px">Monthly revenue</div><div class="meter-amount"><span id="totalRev">$0</span> <span class="of">/ $20,000</span></div></div>
+    <div style="text-align:right"><div class="meter-pct" id="pctText">0%</div><span class="tag" id="statusTag">Below</span></div>
+  </div>
+  <div class="track"><div class="fill" id="meterFill" style="width:0%"></div></div>
+  <div class="meter-foot"><span>Deficit: <strong id="deficitVal">$20,000</strong></span><span>GTV: <strong id="gtvVal">$0</strong></span><span>Blended rate: <strong id="blendedRate">0%</strong></span></div>
+</div>
+
+<div class="g4">
+  <div class="pill" style="--c:var(--cyan)"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cyan)"></div><div class="pill-label">Total revenue</div><div class="pill-val" id="pillTotal">$0</div><div class="pill-sub">All streams</div></div>
+  <div class="pill"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue)"></div><div class="pill-label">Predictions</div><div class="pill-val" id="pillPred">$0</div><div class="pill-sub" id="pillPredS">—</div></div>
+  <div class="pill"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green)"></div><div class="pill-label">Tournaments</div><div class="pill-val" id="pillTour">$0</div><div class="pill-sub" id="pillTourS">—</div></div>
+  <div class="pill"><div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--pink)"></div><div class="pill-label">PvP games</div><div class="pill-val" id="pillPvp">$0</div><div class="pill-sub" id="pillPvpS">—</div></div>
+</div>
+
+<div class="presets">
+  <span style="font-size:12px;color:var(--text3);line-height:32px;margin-right:4px">Scenarios:</span>
+  <button class="pre active" onclick="loadPreset('custom',this)">Custom</button>
+  <button class="pre" onclick="loadPreset('predHeavy',this)">Prediction-heavy</button>
+  <button class="pre" onclick="loadPreset('tourHeavy',this)">Tournament-heavy</button>
+  <button class="pre" onclick="loadPreset('pvpHeavy',this)">PvP-heavy</button>
+  <button class="pre" onclick="loadPreset('balanced',this)">Balanced</button>
+  <button class="pre" onclick="loadPreset('bigEvents',this)">Big events</button>
+</div>
+
+<!-- USER BASE -->
+<div class="panel"><div class="ph"><div class="pd" style="background:var(--cyan)"></div><div class="pt">User base</div><div class="pdesc">Your player funnel</div></div>
+  <div class="sg">
+    <div class="sr"><div class="sh"><span class="sl">Total registered users</span><span class="sv" id="v_totalUsers">10,000</span></div><input type="range" id="s_totalUsers" min="1000" max="100000" step="500" value="10000"><div class="hint">Signed up on platform</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Active user ratio</span><span class="sv" id="v_activeRatio">20%</span></div><input type="range" id="s_activeRatio" min="5" max="50" step="1" value="20"><div class="hint">% playing at least once/month</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Sessions per active user / month</span><span class="sv" id="v_sessions">12</span></div><input type="range" id="s_sessions" min="1" max="60" step="1" value="12"><div class="hint">How often each active user plays</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Avg wager per session</span><span class="sv" id="v_avgWager">$5</span></div><input type="range" id="s_avgWager" min="1" max="50" step="1" value="5"><div class="hint">Entry fee per player per game</div></div>
+  </div>
+  <div class="cmp"><span class="cmp-l">Active users</span><span class="cmp-v" id="c_activeUsers">2,000</span></div>
+  <div class="cmp" style="margin-top:6px"><span class="cmp-l">Total monthly sessions</span><span class="cmp-v" id="c_totalSessions">24,000</span></div>
+</div>
+
+<!-- PREDICTIONS -->
+<div class="panel"><div class="ph"><div class="pd" style="background:var(--blue)"></div><div class="pt">Prediction events</div><div class="pdesc">Net take: 2%</div></div>
+  <div class="sg">
+    <div class="sr"><div class="sh"><span class="sl">Events per month</span><span class="sv" id="v_predEvents">20</span></div><input type="range" id="s_predEvents" min="0" max="100" step="1" value="20"><div class="hint">Cricket, sports, elections, etc.</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Avg purse per event</span><span class="sv" id="v_predPurse">$5,000</span></div><input type="range" id="s_predPurse" min="100" max="100000" step="100" value="5000"><div class="hint">Total pool collected per event</div></div>
+  </div>
+  <div class="cmp"><span class="cmp-l">Total prediction purse</span><span class="cmp-v" id="c_predTotal">$100,000</span></div>
+  <div class="cmp" style="margin-top:6px"><span class="cmp-l">Gameon revenue (2%)</span><span class="cmp-v" id="c_predRev" style="color:var(--blue)">$2,000</span></div>
+</div>
+
+<!-- TOURNAMENTS -->
+<div class="panel"><div class="ph"><div class="pd" style="background:var(--green)"></div><div class="pt">Tournaments</div><div class="pdesc">Net take: 5%</div></div>
+  <div class="sg">
+    <div class="sr"><div class="sh"><span class="sl">Tournaments per month</span><span class="sv" id="v_tourCount">8</span></div><input type="range" id="s_tourCount" min="0" max="50" step="1" value="8"><div class="hint">Weekly, weekend, or special</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Avg purse per tournament</span><span class="sv" id="v_tourPurse">$8,000</span></div><input type="range" id="s_tourPurse" min="100" max="100000" step="100" value="8000"><div class="hint">Total prize pool</div></div>
+  </div>
+  <div class="cmp"><span class="cmp-l">Total tournament purse</span><span class="cmp-v" id="c_tourTotal">$64,000</span></div>
+  <div class="cmp" style="margin-top:6px"><span class="cmp-l">Gameon revenue (5%)</span><span class="cmp-v" id="c_tourRev" style="color:var(--green)">$3,200</span></div>
+</div>
+
+<!-- PVP -->
+<div class="panel"><div class="ph"><div class="pd" style="background:var(--pink)"></div><div class="pt">PvP games</div><div class="pdesc">Net take: 5%</div></div>
+  <div class="sg">
+    <div class="sr"><div class="sh"><span class="sl">Total PvP matches / month</span><span class="sv" id="v_pvpMatches">5,000</span></div><input type="range" id="s_pvpMatches" min="0" max="50000" step="100" value="5000"><div class="hint">All 1v1 matches combined</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Avg match size (both sides)</span><span class="sv" id="v_pvpSize">$10</span></div><input type="range" id="s_pvpSize" min="2" max="100" step="1" value="10"><div class="hint">Combined entry of both players</div></div>
+  </div>
+  <div class="cmp"><span class="cmp-l">Total PvP volume</span><span class="cmp-v" id="c_pvpTotal">$50,000</span></div>
+  <div class="cmp" style="margin-top:6px"><span class="cmp-l">Gameon revenue (5%)</span><span class="cmp-v" id="c_pvpRev" style="color:var(--pink)">$2,500</span></div>
+</div>
+
+<!-- SUMMARY -->
+<div class="panel"><div class="ph"><div class="pd" style="background:var(--amber)"></div><div class="pt">Revenue breakdown</div></div>
+  <table class="bt"><thead><tr><th>Stream</th><th>GTV / purse</th><th>Rate</th><th>Revenue</th></tr></thead><tbody id="bBody"></tbody><tfoot id="bFoot"></tfoot></table>
+  <div class="ins">
+    <div class="in"><div class="in-l">ARPU</div><div class="in-v" id="insARPU">$0</div><div class="in-s">Revenue per active user</div></div>
+    <div class="in"><div class="in-l">Revenue / session</div><div class="in-v" id="insRPS">$0</div><div class="in-s">Avg per game played</div></div>
+    <div class="in"><div class="in-l">ARR</div><div class="in-v" id="insARR">$0</div><div class="in-s">Annual run rate</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== PAGE 2: MARKETING ==================== -->
+<div class="page" id="page-marketing">
+
+<div class="panel" style="border-color:var(--cyan-b)">
+  <div class="ph"><div class="pd" style="background:var(--cyan)"></div><div class="pt">Reverse-engineered marketing targets</div><div class="pdesc">Based on your revenue scenario</div></div>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:16px;">These targets auto-calculate from your revenue tab. Change the revenue sliders and these update.</p>
+
+  <div class="divider">Acquisition funnel</div>
+  <div class="funnel" id="funnelViz"></div>
+
+  <div class="divider">Funnel assumptions (adjust these)</div>
+  <div class="sg" style="margin-bottom:16px">
+    <div class="sr"><div class="sh"><span class="sl">Follower → visitor rate</span><span class="sv" id="v_f2v">3%</span></div><input type="range" id="s_f2v" min="1" max="15" step="0.5" value="3"><div class="hint">% of followers who visit the site monthly</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Visitor → signup rate</span><span class="sv" id="v_v2s">12%</span></div><input type="range" id="s_v2s" min="2" max="40" step="1" value="12"><div class="hint">Landing page conversion rate</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Signup → active rate</span><span class="sv" id="v_s2a">20%</span></div><input type="range" id="s_s2a" min="5" max="50" step="1" value="20"><div class="hint">Same as active ratio from revenue tab</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Referral multiplier</span><span class="sv" id="v_refMult">1.3x</span></div><input type="range" id="s_refMult" min="1" max="3" step="0.1" value="1.3"><div class="hint">Each user refers X extra signups</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Organic / word-of-mouth %</span><span class="sv" id="v_organic">20%</span></div><input type="range" id="s_organic" min="0" max="50" step="1" value="20"><div class="hint">Users who come without paid/social</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Campaign signup boost</span><span class="sv" id="v_campBoost">15%</span></div><input type="range" id="s_campBoost" min="0" max="50" step="1" value="15"><div class="hint">Extra signups from campaigns on top of organic funnel</div></div>
+  </div>
+</div>
+
+<div class="divider">Social media channel targets</div>
+<div class="ch-grid" id="channelGrid"></div>
+
+<div class="divider">Campaign targets</div>
+<div class="panel">
+  <div class="ph"><div class="pd" style="background:var(--amber)"></div><div class="pt">Monthly campaign plan</div><div class="pdesc">What your marketing team must deliver</div></div>
+  <div class="sg" style="margin-bottom:16px">
+    <div class="sr"><div class="sh"><span class="sl">Campaigns per month</span><span class="sv" id="v_campCount">8</span></div><input type="range" id="s_campCount" min="1" max="30" step="1" value="8"><div class="hint">Paid ads, collabs, events, giveaways</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Avg reach per campaign</span><span class="sv" id="v_campReach">10,000</span></div><input type="range" id="s_campReach" min="1000" max="100000" step="500" value="10000"><div class="hint">People who see the campaign</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Campaign click-through rate</span><span class="sv" id="v_campCTR">4%</span></div><input type="range" id="s_campCTR" min="0.5" max="15" step="0.5" value="4"><div class="hint">% who click through to platform</div></div>
+    <div class="sr"><div class="sh"><span class="sl">Campaign conversion rate</span><span class="sv" id="v_campConv">8%</span></div><input type="range" id="s_campConv" min="1" max="25" step="0.5" value="8"><div class="hint">% of clickers who sign up</div></div>
+  </div>
+  <div class="g3">
+    <div class="in"><div class="in-l">Total campaign reach</div><div class="in-v" id="campTotalReach">80,000</div></div>
+    <div class="in"><div class="in-l">Total campaign clicks</div><div class="in-v" id="campTotalClicks">3,200</div></div>
+    <div class="in"><div class="in-l">Signups from campaigns</div><div class="in-v" id="campSignups">256</div></div>
   </div>
 
-  <!-- BREAKEVEN METER -->
-  <div class="meter">
-    <div class="meter-top">
-      <div>
-        <div class="meter-label">Monthly revenue</div>
-        <div class="meter-amount"><span id="totalRev">$0</span> <span class="target">/ $20,000</span></div>
-      </div>
-      <div class="meter-status">
-        <div class="pct" id="pctText">0%</div>
-        <div><span class="tag" id="statusTag">Below target</span></div>
-      </div>
-    </div>
-    <div class="track">
-      <div class="fill" id="meterFill" style="width:0%;background:linear-gradient(90deg,#3b82f6,var(--cyan))"></div>
-    </div>
-    <div class="meter-footer">
-      <span>Deficit: <strong id="deficitVal">$20,000</strong></span>
-      <span>Monthly GTV needed: <strong id="gtvVal">$0</strong></span>
-      <span>Blended take rate: <strong id="blendedRate">0%</strong></span>
-    </div>
-  </div>
+  <div style="margin-top:16px"><div style="font-size:13px;font-weight:500;margin-bottom:10px">Suggested campaign mix</div>
+  <table class="camp"><thead><tr><th>Type</th><th>Frequency</th><th>Avg reach</th><th>Est. signups</th><th>Budget</th></tr></thead><tbody id="campMix"></tbody></table></div>
+</div>
 
-  <!-- REVENUE PILLS -->
-  <div class="rev-pills">
-    <div class="pill p-total"><div class="pill-label">Total revenue</div><div class="pill-val" id="pillTotal">$0</div><div class="pill-sub">All streams combined</div></div>
-    <div class="pill p-pred"><div class="pill-label">Predictions</div><div class="pill-val" id="pillPred">$0</div><div class="pill-sub" id="pillPredSub">2% of purse</div></div>
-    <div class="pill p-tour"><div class="pill-label">Tournaments</div><div class="pill-val" id="pillTour">$0</div><div class="pill-sub" id="pillTourSub">5% of purse</div></div>
-    <div class="pill p-pvp"><div class="pill-label">PvP games</div><div class="pill-val" id="pillPvp">$0</div><div class="pill-sub" id="pillPvpSub">5% of volume</div></div>
-  </div>
+<div class="divider">Content & engagement targets</div>
+<div class="panel">
+  <div class="ph"><div class="pd" style="background:var(--purple)"></div><div class="pt">Weekly content cadence</div></div>
+  <div class="g3" id="contentTargets"></div>
+  <div class="cmp" style="margin-top:12px"><span class="cmp-l">Total posts per month</span><span class="cmp-v" id="totalPosts">0</span></div>
+  <div class="cmp" style="margin-top:6px"><span class="cmp-l">Target engagement rate</span><span class="cmp-v">3-5%</span></div>
+</div>
 
-  <!-- PRESET SCENARIOS -->
-  <div class="presets">
-    <span style="font-size:13px;color:var(--text3);line-height:36px;margin-right:4px;">Scenarios:</span>
-    <button class="preset-btn active" onclick="loadPreset('custom')">Custom</button>
-    <button class="preset-btn" onclick="loadPreset('predHeavy')">Prediction-heavy</button>
-    <button class="preset-btn" onclick="loadPreset('tourHeavy')">Tournament-heavy</button>
-    <button class="preset-btn" onclick="loadPreset('pvpHeavy')">PvP-heavy</button>
-    <button class="preset-btn" onclick="loadPreset('balanced')">Balanced</button>
-    <button class="preset-btn" onclick="loadPreset('bigEvents')">Big events + casual</button>
-    <button class="preset-btn" onclick="loadPreset('minimum')">Bare minimum</button>
-  </div>
+</div>
 
-  <!-- SECTION 1: USER BASE -->
+<!-- ==================== PAGE 3: OPERATIONS ==================== -->
+<div class="page" id="page-ops">
+
+<div class="panel" style="border-color:var(--green-b)">
+  <div class="ph"><div class="pd" style="background:var(--green)"></div><div class="pt">Operations playbook</div><div class="pdesc">What the team must execute monthly</div></div>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:8px">Auto-generated from your revenue targets and marketing funnel.</p>
+</div>
+
+<div class="divider">Events & content operations</div>
+<div class="g2">
   <div class="panel">
-    <div class="panel-head">
-      <div class="panel-dot" style="background:var(--cyan)"></div>
-      <div class="panel-title">User base</div>
-      <div class="panel-desc">How many users and how engaged?</div>
-    </div>
-    <div class="slider-grid">
-      <div class="slider-row">
-        <div class="slider-header"><span class="slider-label">Total registered users</span><span class="slider-value" id="v_totalUsers">10,000</span></div>
-        <input type="range" id="s_totalUsers" min="1000" max="100000" step="500" value="10000">
-        <div class="slider-hint">Your full user base (signed up)</div>
-      </div>
-      <div class="slider-row">
-        <div class="slider-header"><span class="slider-label">Active user ratio</span><span class="slider-value" id="v_activeRatio">20%</span></div>
-        <input type="range" id="s_activeRatio" min="5" max="50" step="1" value="20">
-        <div class="slider-hint">% that play at least once/month</div>
-      </div>
-      <div class="slider-row">
-        <div class="slider-header"><span class="slider-label">Sessions per active user / month</span><span class="slider-value" id="v_sessions">12</span></div>
-        <input type="range" id="s_sessions" min="1" max="60" step="1" value="12">
-        <div class="slider-hint">How many times each active user plays</div>
-      </div>
-      <div class="slider-row">
-        <div class="slider-header"><span class="slider-label">Avg wager per session</span><span class="slider-value" id="v_avgWager">$5</span></div>
-        <input type="range" id="s_avgWager" min="1" max="50" step="1" value="5">
-        <div class="slider-hint">Average entry fee per player per game</div>
-      </div>
-    </div>
-    <div class="computed">
-      <span class="computed-label">Active users</span><span class="computed-val" id="c_activeUsers">2,000</span>
-    </div>
-    <div class="computed" style="margin-top:8px">
-      <span class="computed-label">Total monthly sessions</span><span class="computed-val" id="c_totalSessions">24,000</span>
-    </div>
-    <div class="computed" style="margin-top:8px">
-      <span class="computed-label">Total user-driven GTV (all wagers)</span><span class="computed-val" id="c_userGTV">$120,000</span>
-    </div>
+    <div class="ph"><div class="pd" style="background:var(--blue)"></div><div class="pt">Prediction events ops</div></div>
+    <div id="predOps"></div>
   </div>
-
-  <!-- SECTION 2: PREDICTION EVENTS -->
   <div class="panel">
-    <div class="panel-head">
-      <div class="panel-dot" style="background:#3b82f6"></div>
-      <div class="panel-title">Prediction events</div>
-      <div class="panel-desc">Gameon net take: 2%</div>
-    </div>
-    <div class="slider-grid">
-      <div class="slider-row">
-        <div class="slider-header"><span class="slider-label">Prediction events per month</span><span class="slider-value" id="v_predEvents">20</span></div>
-        <input type="range" id="s_predEvents" min="0" max="100" step="1" value="20">
-        <div class="slider-hint">Cricket matches, elections, sports, etc.</div>
-      </div>
-      <div class="slider-row">
-        <div class="slider-header"><span class="slider-label">Avg purse per event</span><span class="slider-value" id="v_predPurse">$5,000</span></div>
-        <input type="range" id="s_predPurse" min="100" max="100000" step="100" value="5000">
-        <div class="slider-hint">Total pool collected per event</div>
-      </div>
-    </div>
-    <div class="computed">
-      <span class="computed-label">Total prediction purse</span><span class="computed-val" id="c_predTotal">$100,000</span>
-    </div>
-    <div class="computed" style="margin-top:8px">
-      <span class="computed-label">Gameon revenue (2%)</span><span class="computed-val" id="c_predRev" style="color:#3b82f6">$2,000</span>
-    </div>
+    <div class="ph"><div class="pd" style="background:var(--green)"></div><div class="pt">Tournament ops</div></div>
+    <div id="tourOps"></div>
   </div>
+</div>
 
-  <!-- SECTION 3: TOURNAMENTS -->
-  <div class="panel">
-    <div class="panel-head">
-      <div class="panel-dot" style="background:var(--green)"></div>
-      <div class="panel-title">Tournaments</div>
-      <div class="panel-desc">Gameon net take: 5%</div>
-    </div>
-    <div class="slider-grid">
-      <div class="slider-row">
-        <div class="slider-header"><span class="slider-label">Tournaments per month</span><span class="slider-value" id="v_tourCount">8</span></div>
-        <input type="range" id="s_tourCount" min="0" max="50" step="1" value="8">
-        <div class="slider-hint">Weekly, weekend, or special events</div>
-      </div>
-      <div class="slider-row">
-        <div class="slider-header"><span class="slider-label">Avg purse per tournament</span><span class="slider-value" id="v_tourPurse">$8,000</span></div>
-        <input type="range" id="s_tourPurse" min="100" max="100000" step="100" value="8000">
-        <div class="slider-hint">Total prize pool per tournament</div>
-      </div>
-    </div>
-    <div class="computed">
-      <span class="computed-label">Total tournament purse</span><span class="computed-val" id="c_tourTotal">$64,000</span>
-    </div>
-    <div class="computed" style="margin-top:8px">
-      <span class="computed-label">Gameon revenue (5%)</span><span class="computed-val" id="c_tourRev" style="color:var(--green)">$3,200</span>
-    </div>
-  </div>
+<div class="panel">
+  <div class="ph"><div class="pd" style="background:var(--pink)"></div><div class="pt">PvP games ops</div></div>
+  <div id="pvpOps"></div>
+</div>
 
-  <!-- SECTION 4: PVP GAMES -->
-  <div class="panel">
-    <div class="panel-head">
-      <div class="panel-dot" style="background:var(--pink)"></div>
-      <div class="panel-title">PvP games</div>
-      <div class="panel-desc">Gameon net take: 5%</div>
-    </div>
-    <div class="slider-grid">
-      <div class="slider-row">
-        <div class="slider-header"><span class="slider-label">Total PvP matches / month</span><span class="slider-value" id="v_pvpMatches">5,000</span></div>
-        <input type="range" id="s_pvpMatches" min="0" max="50000" step="100" value="5000">
-        <div class="slider-hint">Individual 1v1 matches across all games</div>
-      </div>
-      <div class="slider-row">
-        <div class="slider-header"><span class="slider-label">Avg match size (both sides)</span><span class="slider-value" id="v_pvpSize">$10</span></div>
-        <input type="range" id="s_pvpSize" min="2" max="100" step="1" value="10">
-        <div class="slider-hint">Combined entry of both players</div>
-      </div>
-    </div>
-    <div class="computed">
-      <span class="computed-label">Total PvP volume</span><span class="computed-val" id="c_pvpTotal">$50,000</span>
-    </div>
-    <div class="computed" style="margin-top:8px">
-      <span class="computed-label">Gameon revenue (5%)</span><span class="computed-val" id="c_pvpRev" style="color:var(--pink)">$2,500</span>
-    </div>
-  </div>
+<div class="divider">Community & growth operations</div>
+<div class="panel">
+  <div class="ph"><div class="pd" style="background:var(--cyan)"></div><div class="pt">Community management targets</div></div>
+  <div id="communityOps"></div>
+</div>
 
-  <!-- FULL BREAKDOWN -->
-  <div class="panel">
-    <div class="panel-head">
-      <div class="panel-dot" style="background:var(--amber)"></div>
-      <div class="panel-title">Full breakeven breakdown</div>
-    </div>
-    <table class="breakdown">
-      <thead><tr><th>Stream</th><th>GTV / Purse</th><th>Take rate</th><th>Revenue</th></tr></thead>
-      <tbody id="breakdownBody"></tbody>
-      <tfoot id="breakdownFoot"></tfoot>
-    </table>
+<div class="panel">
+  <div class="ph"><div class="pd" style="background:var(--amber)"></div><div class="pt">Influencer & partnership ops</div></div>
+  <div id="influencerOps"></div>
+</div>
 
-    <div class="insights">
-      <div class="insight">
-        <div class="insight-label">Revenue per active user</div>
-        <div class="insight-val" id="insARPU">$0</div>
-        <div class="insight-sub">Monthly ARPU</div>
-      </div>
-      <div class="insight">
-        <div class="insight-label">Revenue per session</div>
-        <div class="insight-val" id="insRPS">$0</div>
-        <div class="insight-sub">Avg revenue generated per game</div>
-      </div>
-      <div class="insight">
-        <div class="insight-label">Daily revenue needed</div>
-        <div class="insight-val" id="insDailyGap">$0</div>
-        <div class="insight-sub" id="insDailyGapSub">To close the deficit</div>
-      </div>
-      <div class="insight">
-        <div class="insight-label">Annual run rate (ARR)</div>
-        <div class="insight-val" id="insARR">$0</div>
-        <div class="insight-sub">At current monthly revenue × 12</div>
-      </div>
-      <div class="insight">
-        <div class="insight-label">Months to breakeven</div>
-        <div class="insight-val" id="insMonths">—</div>
-        <div class="insight-sub" id="insMonthsSub">At this configuration</div>
-      </div>
-      <div class="insight">
-        <div class="insight-label">Users still needed</div>
-        <div class="insight-val" id="insUsersGap">0</div>
-        <div class="insight-sub">From current 7,000 registered</div>
-      </div>
-    </div>
-  </div>
+<div class="divider">Monthly KPI scorecard</div>
+<div class="panel">
+  <div class="ph"><div class="pd" style="background:var(--purple)"></div><div class="pt">Team targets summary</div><div class="pdesc">Print or share with team</div></div>
+  <table class="bt" id="scorecardTable"></table>
+</div>
+
+</div>
 
 </div>
 
 <script>
-const T = 20000;
-const CURRENT_USERS = 7000;
+const T=20000;
+function fmt(n){return '$'+Math.round(n).toLocaleString()}
+function fmtN(n){return Math.round(n).toLocaleString()}
+function val(id){return +document.getElementById(id).value}
 
-const sliders = {
-  totalUsers: { el: 's_totalUsers', out: 'v_totalUsers', fmt: v => v.toLocaleString() },
-  activeRatio: { el: 's_activeRatio', out: 'v_activeRatio', fmt: v => v + '%' },
-  sessions: { el: 's_sessions', out: 'v_sessions', fmt: v => v },
-  avgWager: { el: 's_avgWager', out: 'v_avgWager', fmt: v => '$' + v },
-  predEvents: { el: 's_predEvents', out: 'v_predEvents', fmt: v => v },
-  predPurse: { el: 's_predPurse', out: 'v_predPurse', fmt: v => '$' + Math.round(v).toLocaleString() },
-  tourCount: { el: 's_tourCount', out: 'v_tourCount', fmt: v => v },
-  tourPurse: { el: 's_tourPurse', out: 'v_tourPurse', fmt: v => '$' + Math.round(v).toLocaleString() },
-  pvpMatches: { el: 's_pvpMatches', out: 'v_pvpMatches', fmt: v => Math.round(v).toLocaleString() },
-  pvpSize: { el: 's_pvpSize', out: 'v_pvpSize', fmt: v => '$' + v },
+const channels=[
+  {name:'Facebook',icon:'f',color:'#1877f2',share:0.25},
+  {name:'Instagram',icon:'i',color:'#e4405f',share:0.2},
+  {name:'TikTok',icon:'t',color:'#ff0050',share:0.2},
+  {name:'X (Twitter)',icon:'x',color:'#8b949e',share:0.1},
+  {name:'Telegram',icon:'tg',color:'#0088cc',share:0.15},
+  {name:'Discord',icon:'d',color:'#5865f2',share:0.1},
+];
+
+const presets={
+  custom:null,
+  predHeavy:{totalUsers:25000,activeRatio:20,sessions:15,avgWager:5,predEvents:50,predPurse:15000,tourCount:4,tourPurse:5000,pvpMatches:2000,pvpSize:8},
+  tourHeavy:{totalUsers:15000,activeRatio:20,sessions:10,avgWager:8,predEvents:10,predPurse:3000,tourCount:20,tourPurse:15000,pvpMatches:3000,pvpSize:10},
+  pvpHeavy:{totalUsers:30000,activeRatio:25,sessions:20,avgWager:5,predEvents:10,predPurse:2000,tourCount:4,tourPurse:5000,pvpMatches:20000,pvpSize:12},
+  balanced:{totalUsers:20000,activeRatio:20,sessions:12,avgWager:6,predEvents:25,predPurse:8000,tourCount:10,tourPurse:10000,pvpMatches:8000,pvpSize:10},
+  bigEvents:{totalUsers:12000,activeRatio:20,sessions:8,avgWager:10,predEvents:10,predPurse:40000,tourCount:5,tourPurse:30000,pvpMatches:3000,pvpSize:8},
 };
 
-function val(key) { return +document.getElementById(sliders[key].el).value; }
-function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
-
-const presets = {
-  custom: null,
-  predHeavy: { totalUsers:25000,activeRatio:20,sessions:15,avgWager:5,predEvents:50,predPurse:15000,tourCount:4,tourPurse:5000,pvpMatches:2000,pvpSize:8 },
-  tourHeavy: { totalUsers:15000,activeRatio:20,sessions:10,avgWager:8,predEvents:10,predPurse:3000,tourCount:20,tourPurse:15000,pvpMatches:3000,pvpSize:10 },
-  pvpHeavy: { totalUsers:30000,activeRatio:25,sessions:20,avgWager:5,predEvents:10,predPurse:2000,tourCount:4,tourPurse:5000,pvpMatches:20000,pvpSize:12 },
-  balanced: { totalUsers:20000,activeRatio:20,sessions:12,avgWager:6,predEvents:25,predPurse:8000,tourCount:10,tourPurse:10000,pvpMatches:8000,pvpSize:10 },
-  bigEvents: { totalUsers:12000,activeRatio:20,sessions:8,avgWager:10,predEvents:10,predPurse:40000,tourCount:5,tourPurse:30000,pvpMatches:3000,pvpSize:8 },
-  minimum: { totalUsers:28000,activeRatio:20,sessions:10,avgWager:5,predEvents:30,predPurse:10000,tourCount:8,tourPurse:12500,pvpMatches:5000,pvpSize:10 },
+const sMap={
+  totalUsers:{el:'s_totalUsers',out:'v_totalUsers',f:v=>fmtN(v)},
+  activeRatio:{el:'s_activeRatio',out:'v_activeRatio',f:v=>v+'%'},
+  sessions:{el:'s_sessions',out:'v_sessions',f:v=>v},
+  avgWager:{el:'s_avgWager',out:'v_avgWager',f:v=>'$'+v},
+  predEvents:{el:'s_predEvents',out:'v_predEvents',f:v=>v},
+  predPurse:{el:'s_predPurse',out:'v_predPurse',f:v=>'$'+fmtN(v)},
+  tourCount:{el:'s_tourCount',out:'v_tourCount',f:v=>v},
+  tourPurse:{el:'s_tourPurse',out:'v_tourPurse',f:v=>'$'+fmtN(v)},
+  pvpMatches:{el:'s_pvpMatches',out:'v_pvpMatches',f:v=>fmtN(v)},
+  pvpSize:{el:'s_pvpSize',out:'v_pvpSize',f:v=>'$'+v},
 };
 
-function loadPreset(name) {
-  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  if (!presets[name]) return;
-  const p = presets[name];
-  Object.keys(p).forEach(k => {
-    const el = document.getElementById(sliders[k].el);
-    if (el) el.value = p[k];
-  });
+const mktSliders=['s_f2v','s_v2s','s_s2a','s_refMult','s_organic','s_campBoost','s_campCount','s_campReach','s_campCTR','s_campConv'];
+
+function switchPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
   update();
 }
 
-function update() {
-  // Read values
-  const totalUsers = val('totalUsers');
-  const activeRatio = val('activeRatio') / 100;
-  const sessions = val('sessions');
-  const avgWager = val('avgWager');
-  const predEvents = val('predEvents');
-  const predPurse = val('predPurse');
-  const tourCount = val('tourCount');
-  const tourPurse = val('tourPurse');
-  const pvpMatches = val('pvpMatches');
-  const pvpSize = val('pvpSize');
-
-  // Update displayed values
-  Object.keys(sliders).forEach(k => {
-    const s = sliders[k];
-    document.getElementById(s.out).textContent = s.fmt(+document.getElementById(s.el).value);
-  });
-
-  // Computed: user base
-  const activeUsers = Math.round(totalUsers * activeRatio);
-  const totalSessions = activeUsers * sessions;
-  const userGTV = totalSessions * avgWager * 2; // both sides of match
-  document.getElementById('c_activeUsers').textContent = activeUsers.toLocaleString();
-  document.getElementById('c_totalSessions').textContent = totalSessions.toLocaleString();
-  document.getElementById('c_userGTV').textContent = fmt(userGTV);
-
-  // Computed: predictions
-  const predTotal = predEvents * predPurse;
-  const predRev = predTotal * 0.02;
-  document.getElementById('c_predTotal').textContent = fmt(predTotal);
-  document.getElementById('c_predRev').textContent = fmt(predRev);
-
-  // Computed: tournaments
-  const tourTotal = tourCount * tourPurse;
-  const tourRev = tourTotal * 0.05;
-  document.getElementById('c_tourTotal').textContent = fmt(tourTotal);
-  document.getElementById('c_tourRev').textContent = fmt(tourRev);
-
-  // Computed: PvP
-  const pvpTotal = pvpMatches * pvpSize;
-  const pvpRev = pvpTotal * 0.05;
-  document.getElementById('c_pvpTotal').textContent = fmt(pvpTotal);
-  document.getElementById('c_pvpRev').textContent = fmt(pvpRev);
-
-  // Revenue totals
-  const totalRev = predRev + tourRev + pvpRev;
-  const totalGTV = predTotal + tourTotal + pvpTotal;
-  const blended = totalGTV > 0 ? (totalRev / totalGTV * 100) : 0;
-
-  // Meter
-  const pct = Math.min(100, (totalRev / T) * 100);
-  document.getElementById('totalRev').textContent = fmt(totalRev);
-  document.getElementById('pctText').textContent = Math.round(pct) + '%';
-  const fill = document.getElementById('meterFill');
-  fill.style.width = pct + '%';
-  if (pct >= 100) {
-    fill.style.background = 'linear-gradient(90deg, var(--green), var(--cyan))';
-  } else if (pct >= 70) {
-    fill.style.background = 'linear-gradient(90deg, var(--amber), var(--cyan))';
-  } else {
-    fill.style.background = 'linear-gradient(90deg, #3b82f6, var(--cyan))';
-  }
-
-  const tag = document.getElementById('statusTag');
-  if (pct >= 100) { tag.textContent = 'Breakeven!'; tag.className = 'tag tag-success'; }
-  else if (pct >= 70) { tag.textContent = 'Almost there'; tag.className = 'tag tag-warning'; }
-  else { tag.textContent = 'Below target'; tag.className = 'tag tag-danger'; }
-
-  const deficit = Math.max(0, T - totalRev);
-  document.getElementById('deficitVal').textContent = fmt(deficit);
-  document.getElementById('gtvVal').textContent = fmt(totalGTV);
-  document.getElementById('blendedRate').textContent = blended.toFixed(1) + '%';
-
-  // Pills
-  document.getElementById('pillTotal').textContent = fmt(totalRev);
-  document.getElementById('pillPred').textContent = fmt(predRev);
-  document.getElementById('pillTour').textContent = fmt(tourRev);
-  document.getElementById('pillPvp').textContent = fmt(pvpRev);
-  document.getElementById('pillPredSub').textContent = fmt(predTotal) + ' purse × 2%';
-  document.getElementById('pillTourSub').textContent = fmt(tourTotal) + ' purse × 5%';
-  document.getElementById('pillPvpSub').textContent = fmt(pvpTotal) + ' vol × 5%';
-
-  // Breakdown table
-  const body = document.getElementById('breakdownBody');
-  body.innerHTML = `
-    <tr><td><span class="stream-dot" style="background:#3b82f6"></span>Prediction events</td><td>${fmt(predTotal)}</td><td>2%</td><td style="color:#3b82f6">${fmt(predRev)}</td></tr>
-    <tr><td><span class="stream-dot" style="background:var(--green)"></span>Tournaments</td><td>${fmt(tourTotal)}</td><td>5%</td><td style="color:var(--green)">${fmt(tourRev)}</td></tr>
-    <tr><td><span class="stream-dot" style="background:var(--pink)"></span>PvP games</td><td>${fmt(pvpTotal)}</td><td>5%</td><td style="color:var(--pink)">${fmt(pvpRev)}</td></tr>
-  `;
-  document.getElementById('breakdownFoot').innerHTML = `
-    <tr><td>Total</td><td>${fmt(totalGTV)}</td><td>${blended.toFixed(1)}%</td><td>${fmt(totalRev)}</td></tr>
-  `;
-
-  // Insights
-  const arpu = activeUsers > 0 ? totalRev / activeUsers : 0;
-  const rps = totalSessions > 0 ? totalRev / totalSessions : 0;
-  const dailyGap = deficit / 30;
-  const arr = totalRev * 12;
-  const usersGap = Math.max(0, totalUsers - CURRENT_USERS);
-
-  document.getElementById('insARPU').textContent = '$' + arpu.toFixed(2);
-  document.getElementById('insRPS').textContent = '$' + rps.toFixed(2);
-  document.getElementById('insDailyGap').textContent = fmt(dailyGap);
-  document.getElementById('insDailyGapSub').textContent = deficit <= 0 ? 'Target exceeded!' : 'To close the deficit';
-  document.getElementById('insARR').textContent = fmt(arr);
-  document.getElementById('insUsersGap').textContent = usersGap > 0 ? '+' + usersGap.toLocaleString() : 'Already there';
-
-  if (totalRev >= T) {
-    document.getElementById('insMonths').textContent = 'Now';
-    document.getElementById('insMonthsSub').textContent = 'You hit breakeven at these numbers';
-  } else {
-    document.getElementById('insMonths').textContent = '—';
-    document.getElementById('insMonthsSub').textContent = 'Increase levers to reach $20K';
-  }
+function loadPreset(name,btn){
+  document.querySelectorAll('.pre').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(!presets[name])return;
+  const p=presets[name];
+  Object.keys(p).forEach(k=>{const e=document.getElementById(sMap[k].el);if(e)e.value=p[k]});
+  update();
 }
 
-// Bind all sliders
-Object.keys(sliders).forEach(k => {
-  document.getElementById(sliders[k].el).addEventListener('input', () => {
-    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector('.preset-btn').classList.add('active');
+function update(){
+  const tu=val('s_totalUsers'),ar=val('s_activeRatio')/100,sess=val('s_sessions'),wag=val('s_avgWager');
+  const pe=val('s_predEvents'),pp=val('s_predPurse'),tc=val('s_tourCount'),tp=val('s_tourPurse');
+  const pm=val('s_pvpMatches'),ps=val('s_pvpSize');
+
+  Object.keys(sMap).forEach(k=>{const s=sMap[k];document.getElementById(s.out).textContent=s.f(+document.getElementById(s.el).value)});
+
+  const au=Math.round(tu*ar),ts=au*sess;
+  document.getElementById('c_activeUsers').textContent=fmtN(au);
+  document.getElementById('c_totalSessions').textContent=fmtN(ts);
+
+  const predT=pe*pp,predR=predT*0.02;
+  document.getElementById('c_predTotal').textContent=fmt(predT);
+  document.getElementById('c_predRev').textContent=fmt(predR);
+
+  const tourT=tc*tp,tourR=tourT*0.05;
+  document.getElementById('c_tourTotal').textContent=fmt(tourT);
+  document.getElementById('c_tourRev').textContent=fmt(tourR);
+
+  const pvpT=pm*ps,pvpR=pvpT*0.05;
+  document.getElementById('c_pvpTotal').textContent=fmt(pvpT);
+  document.getElementById('c_pvpRev').textContent=fmt(pvpR);
+
+  const totalRev=predR+tourR+pvpR,gtv=predT+tourT+pvpT;
+  const bl=gtv>0?(totalRev/gtv*100):0;
+  const pct=Math.min(100,totalRev/T*100);
+  const deficit=Math.max(0,T-totalRev);
+
+  document.getElementById('totalRev').textContent=fmt(totalRev);
+  document.getElementById('pctText').textContent=Math.round(pct)+'%';
+  const fill=document.getElementById('meterFill');
+  fill.style.width=pct+'%';
+  fill.style.background=pct>=100?'linear-gradient(90deg,var(--green),var(--cyan))':pct>=70?'linear-gradient(90deg,var(--amber),var(--cyan))':'linear-gradient(90deg,var(--blue),var(--cyan))';
+  const tag=document.getElementById('statusTag');
+  if(pct>=100){tag.textContent='Breakeven!';tag.className='tag tag-g'}else if(pct>=70){tag.textContent='Almost';tag.className='tag tag-a'}else{tag.textContent='Below';tag.className='tag tag-r'}
+  document.getElementById('deficitVal').textContent=fmt(deficit);
+  document.getElementById('gtvVal').textContent=fmt(gtv);
+  document.getElementById('blendedRate').textContent=bl.toFixed(1)+'%';
+  document.getElementById('pillTotal').textContent=fmt(totalRev);
+  document.getElementById('pillPred').textContent=fmt(predR);document.getElementById('pillPredS').textContent=fmt(predT)+' @ 2%';
+  document.getElementById('pillTour').textContent=fmt(tourR);document.getElementById('pillTourS').textContent=fmt(tourT)+' @ 5%';
+  document.getElementById('pillPvp').textContent=fmt(pvpR);document.getElementById('pillPvpS').textContent=fmt(pvpT)+' @ 5%';
+
+  document.getElementById('bBody').innerHTML=`
+    <tr><td><span class="sdot" style="background:var(--blue)"></span>Predictions</td><td>${fmt(predT)}</td><td>2%</td><td style="color:var(--blue)">${fmt(predR)}</td></tr>
+    <tr><td><span class="sdot" style="background:var(--green)"></span>Tournaments</td><td>${fmt(tourT)}</td><td>5%</td><td style="color:var(--green)">${fmt(tourR)}</td></tr>
+    <tr><td><span class="sdot" style="background:var(--pink)"></span>PvP games</td><td>${fmt(pvpT)}</td><td>5%</td><td style="color:var(--pink)">${fmt(pvpR)}</td></tr>`;
+  document.getElementById('bFoot').innerHTML=`<tr><td>Total</td><td>${fmt(gtv)}</td><td>${bl.toFixed(1)}%</td><td>${fmt(totalRev)}</td></tr>`;
+
+  const arpu=au>0?totalRev/au:0,rps=ts>0?totalRev/ts:0;
+  document.getElementById('insARPU').textContent='$'+arpu.toFixed(2);
+  document.getElementById('insRPS').textContent='$'+rps.toFixed(2);
+  document.getElementById('insARR').textContent=fmt(totalRev*12);
+
+  updateMarketing(tu,au,ts);
+  updateOps(tu,au,pe,pp,tc,tp,pm,ps,predR,tourR,pvpR,totalRev,ts);
+}
+
+function updateMarketing(totalUsers,activeUsers,totalSessions){
+  const f2v=val('s_f2v')/100, v2s=val('s_v2s')/100, s2a=val('s_s2a')/100;
+  const refMult=val('s_refMult'), organic=val('s_organic')/100, campBoost=val('s_campBoost')/100;
+
+  document.getElementById('v_f2v').textContent=val('s_f2v')+'%';
+  document.getElementById('v_v2s').textContent=val('s_v2s')+'%';
+  document.getElementById('v_s2a').textContent=val('s_s2a')+'%';
+  document.getElementById('v_refMult').textContent=val('s_refMult').toFixed(1)+'x';
+  document.getElementById('v_organic').textContent=val('s_organic')+'%';
+  document.getElementById('v_campBoost').textContent=val('s_campBoost')+'%';
+
+  // Reverse funnel
+  const signupsNeeded=Math.ceil(totalUsers/refMult);
+  const paidSignups=Math.ceil(signupsNeeded*(1-organic));
+  const visitorsNeeded=Math.ceil(paidSignups/v2s);
+  const followersNeeded=Math.ceil(visitorsNeeded/f2v);
+
+  const funnel=document.getElementById('funnelViz');
+  const steps=[
+    {name:'Total followers needed (all channels)',val:fmtN(followersNeeded),color:'var(--purple)',rate:''},
+    {name:'Monthly site visitors from socials',val:fmtN(visitorsNeeded),color:'var(--blue)',rate:Math.round(f2v*100)+'% of followers'},
+    {name:'Signups from paid/social',val:fmtN(paidSignups),color:'var(--cyan)',rate:Math.round(v2s*100)+'% of visitors'},
+    {name:'Organic / word-of-mouth signups',val:fmtN(Math.ceil(signupsNeeded*organic)),color:'var(--green)',rate:Math.round(organic*100)+'% organic'},
+    {name:'Total signups (incl. referrals)',val:fmtN(totalUsers),color:'var(--amber)',rate:refMult.toFixed(1)+'x referral multiplier'},
+    {name:'Active users',val:fmtN(activeUsers),color:'var(--pink)',rate:Math.round(s2a*100)+'% activation'},
+  ];
+  funnel.innerHTML=steps.map(s=>`<div class="funnel-step"><div class="funnel-dot" style="background:${s.color}"></div><div class="funnel-content"><span class="funnel-name">${s.name}</span><span><span class="funnel-val">${s.val}</span><span class="funnel-rate">${s.rate}</span></span></div></div>`).join('');
+
+  // Channel targets
+  const grid=document.getElementById('channelGrid');
+  grid.innerHTML=channels.map(ch=>{
+    const chFollow=Math.ceil(followersNeeded*ch.share);
+    const chVisit=Math.ceil(chFollow*f2v);
+    const chSign=Math.ceil(chVisit*v2s);
+    return `<div class="ch"><div class="ch-head"><div class="ch-icon" style="background:${ch.color}22;color:${ch.color}">${ch.icon.toUpperCase()}</div><div class="ch-name">${ch.name}</div></div>
+    <div class="ch-row"><label>Followers target</label><span>${fmtN(chFollow)}</span></div>
+    <div class="ch-row"><label>Monthly visitors</label><span>${fmtN(chVisit)}</span></div>
+    <div class="ch-row"><label>Signups driven</label><span>${fmtN(chSign)}</span></div>
+    <div class="ch-row"><label>Share of funnel</label><span>${Math.round(ch.share*100)}%</span></div></div>`;
+  }).join('');
+
+  // Campaign calculations
+  const campCount=val('s_campCount'),campReach=val('s_campReach'),campCTR=val('s_campCTR')/100,campConv=val('s_campConv')/100;
+  document.getElementById('v_campCount').textContent=campCount;
+  document.getElementById('v_campReach').textContent=fmtN(campReach);
+  document.getElementById('v_campCTR').textContent=val('s_campCTR')+'%';
+  document.getElementById('v_campConv').textContent=val('s_campConv')+'%';
+
+  const totalReach=campCount*campReach,totalClicks=Math.round(totalReach*campCTR),campSigns=Math.round(totalClicks*campConv);
+  document.getElementById('campTotalReach').textContent=fmtN(totalReach);
+  document.getElementById('campTotalClicks').textContent=fmtN(totalClicks);
+  document.getElementById('campSignups').textContent=fmtN(campSigns);
+
+  // Campaign mix suggestion
+  const mix=[
+    {type:'Prediction event promos',freq:Math.ceil(campCount*0.25),reach:Math.round(campReach*1.2),sign:Math.round(campReach*1.2*campCTR*campConv*Math.ceil(campCount*0.25)),budget:'$200-400'},
+    {type:'Tournament announcements',freq:Math.ceil(campCount*0.2),reach:Math.round(campReach*1.5),sign:Math.round(campReach*1.5*campCTR*campConv*Math.ceil(campCount*0.2)),budget:'$150-300'},
+    {type:'Influencer collaborations',freq:Math.ceil(campCount*0.15),reach:Math.round(campReach*2),sign:Math.round(campReach*2*campCTR*0.06*Math.ceil(campCount*0.15)),budget:'$300-500'},
+    {type:'Paid social ads (Meta/TikTok)',freq:Math.ceil(campCount*0.25),reach:Math.round(campReach*0.8),sign:Math.round(campReach*0.8*campCTR*campConv*Math.ceil(campCount*0.25)),budget:'$400-600'},
+    {type:'Community giveaways / airdrops',freq:Math.ceil(campCount*0.15),reach:Math.round(campReach*0.6),sign:Math.round(campReach*0.6*0.08*campConv*Math.ceil(campCount*0.15)),budget:'$100-200'},
+  ];
+  document.getElementById('campMix').innerHTML=mix.map(m=>`<tr><td>${m.type}</td><td class="mono">${m.freq}/mo</td><td class="mono">${fmtN(m.reach)}</td><td class="mono">${fmtN(m.sign)}</td><td>${m.budget}</td></tr>`).join('');
+
+  // Content targets
+  const contentTypes=[
+    {name:'Game highlights / results',perWeek:5,channels:'IG, TikTok, X'},
+    {name:'Prediction event teasers',perWeek:3,channels:'FB, IG, Telegram'},
+    {name:'Tournament promos',perWeek:2,channels:'All channels'},
+    {name:'Educational / how-to-play',perWeek:2,channels:'TikTok, YouTube'},
+    {name:'Community polls / engagement',perWeek:3,channels:'X, Telegram, Discord'},
+    {name:'Behind-the-scenes / founder',perWeek:1,channels:'IG Stories, X'},
+    {name:'Winner spotlights',perWeek:2,channels:'IG, FB, Telegram'},
+    {name:'Memes / trending content',perWeek:3,channels:'TikTok, X, IG'},
+    {name:'Partnership / collab posts',perWeek:1,channels:'All channels'},
+  ];
+  document.getElementById('contentTargets').innerHTML=contentTypes.map(c=>`<div class="in"><div class="in-l">${c.name}</div><div class="in-v">${c.perWeek}/week</div><div class="in-s">${c.channels}</div></div>`).join('');
+  const totalPostsWeek=contentTypes.reduce((s,c)=>s+c.perWeek,0);
+  document.getElementById('totalPosts').textContent=totalPostsWeek*4+'/month ('+totalPostsWeek+'/week)';
+}
+
+function updateOps(tu,au,pe,pp,tc,tp,pm,ps,predR,tourR,pvpR,totalRev,totalSessions){
+  const newUsersNeeded=Math.max(0,tu-7000);
+  const monthlyNewUsers=Math.ceil(newUsersNeeded>0?newUsersNeeded/6:0); // over 6 months
+
+  // Prediction ops
+  document.getElementById('predOps').innerHTML=`
+    <div class="g3">
+      <div class="in"><div class="in-l">Events to run</div><div class="in-v">${pe}/month</div><div class="in-s">${Math.ceil(pe/4)}/week average</div></div>
+      <div class="in"><div class="in-l">Avg purse target</div><div class="in-v">${fmt(pp)}</div><div class="in-s">Per event pool</div></div>
+      <div class="in"><div class="in-l">Revenue target</div><div class="in-v" style="color:var(--blue)">${fmt(predR)}</div><div class="in-s">From ${fmt(pe*pp)} total purse</div></div>
+    </div>
+    <div style="margin-top:12px;font-size:13px;color:var(--text2);line-height:1.8">
+      <strong style="color:var(--text)">Weekly execution:</strong><br>
+      — Source ${Math.ceil(pe/4)} prediction events (cricket, football, elections, trending topics)<br>
+      — Each event needs ${pp>0?Math.ceil(pp/5):0}+ participants at $5 avg wager to hit ${fmt(pp)} purse<br>
+      — Promote each event 24-48hrs before across socials + Telegram/Discord<br>
+      — Post results + winner highlights within 2hrs of event closing
+    </div>`;
+
+  // Tournament ops
+  document.getElementById('tourOps').innerHTML=`
+    <div class="g3">
+      <div class="in"><div class="in-l">Tournaments to run</div><div class="in-v">${tc}/month</div><div class="in-s">${tc<=4?tc+'/month':Math.ceil(tc/4)+'/week'}</div></div>
+      <div class="in"><div class="in-l">Avg purse target</div><div class="in-v">${fmt(tp)}</div><div class="in-s">Per tournament pool</div></div>
+      <div class="in"><div class="in-l">Revenue target</div><div class="in-v" style="color:var(--green)">${fmt(tourR)}</div><div class="in-s">From ${fmt(tc*tp)} total purse</div></div>
+    </div>
+    <div style="margin-top:12px;font-size:13px;color:var(--text2);line-height:1.8">
+      <strong style="color:var(--text)">Weekly execution:</strong><br>
+      — Schedule ${tc<=4?'1 tournament per '+(tc===1?'month':Math.ceil(30/tc)+' days'):Math.ceil(tc/4)+' tournaments per week'}<br>
+      — Each needs ${tp>0?Math.ceil(tp/10):0}+ players at $10 avg entry to fill ${fmt(tp)} purse<br>
+      — Create tournament pages 1 week before, promote 3-5 days out<br>
+      — Run bracket updates live on Telegram/Discord during tournament
+    </div>`;
+
+  // PvP ops
+  const dailyMatches=Math.ceil(pm/30);
+  document.getElementById('pvpOps').innerHTML=`
+    <div class="g3">
+      <div class="in"><div class="in-l">Daily matches target</div><div class="in-v">${fmtN(dailyMatches)}</div><div class="in-s">${fmtN(pm)}/month total</div></div>
+      <div class="in"><div class="in-l">Avg match size</div><div class="in-v">${fmt(ps)}</div><div class="in-s">Both players combined</div></div>
+      <div class="in"><div class="in-l">Revenue target</div><div class="in-v" style="color:var(--pink)">${fmt(pvpR)}</div><div class="in-s">From ${fmt(pm*ps)} volume</div></div>
+    </div>
+    <div style="margin-top:12px;font-size:13px;color:var(--text2);line-height:1.8">
+      <strong style="color:var(--text)">Execution levers:</strong><br>
+      — Need ${fmtN(dailyMatches)} matches/day = ${fmtN(Math.ceil(dailyMatches/12))} concurrent active matchmakers per hour (12hr active window)<br>
+      — Push daily challenges, streaks, and leaderboard resets to drive sessions<br>
+      — Add new AI games quarterly to keep game catalogue fresh<br>
+      — Feature "game of the day" to concentrate liquidity in matchmaking
+    </div>`;
+
+  // Community ops
+  document.getElementById('communityOps').innerHTML=`
+    <div class="g3">
+      <div class="in"><div class="in-l">New users/month target</div><div class="in-v">${fmtN(monthlyNewUsers)}</div><div class="in-s">To reach ${fmtN(tu)} in 6 months</div></div>
+      <div class="in"><div class="in-l">Active users to maintain</div><div class="in-v">${fmtN(au)}</div><div class="in-s">${val('s_activeRatio')}% of total base</div></div>
+      <div class="in"><div class="in-l">Daily active target</div><div class="in-v">${fmtN(Math.ceil(au*0.4))}</div><div class="in-s">~40% of MAU as DAU</div></div>
+    </div>
+    <div style="margin-top:12px;font-size:13px;color:var(--text2);line-height:1.8">
+      <strong style="color:var(--text)">Community team daily tasks:</strong><br>
+      — Respond to all Discord/Telegram messages within 2hrs during active hours<br>
+      — Post daily prediction discussion threads in Telegram<br>
+      — Run 2-3 community polls/votes per week (next event, game preferences)<br>
+      — Spotlight ${Math.ceil(au*0.002)} winners per week across socials<br>
+      — Host 1 live AMA or community call per month<br>
+      — Monitor and escalate support tickets (target: &lt;4hr response time)
+    </div>`;
+
+  // Influencer ops
+  document.getElementById('influencerOps').innerHTML=`
+    <div class="g3">
+      <div class="in"><div class="in-l">Influencer collabs/month</div><div class="in-v">4-6</div><div class="in-s">Micro + macro mix</div></div>
+      <div class="in"><div class="in-l">Micro-influencers (1-10K)</div><div class="in-v">3-4</div><div class="in-s">$50-150 per collab</div></div>
+      <div class="in"><div class="in-l">Macro-influencers (10K+)</div><div class="in-v">1-2</div><div class="in-s">$200-500 per collab</div></div>
+    </div>
+    <div style="margin-top:12px;font-size:13px;color:var(--text2);line-height:1.8">
+      <strong style="color:var(--text)">Execution:</strong><br>
+      — Target Sri Lankan gaming/cricket/prediction niche creators<br>
+      — Provide each influencer a unique referral code to track signups<br>
+      — Create "creator partner" tier: give them PvP revenue share (from your 10% rake)<br>
+      — Supply ready-made content packs (clips, graphics, talking points)<br>
+      — Monthly performance review: drop underperformers, double down on top converters
+    </div>`;
+
+  // Scorecard
+  const sc=document.getElementById('scorecardTable');
+  const rows=[
+    ['Revenue','Total monthly revenue',fmt(totalRev),totalRev>=T?'tag-g':'tag-r',totalRev>=T?'On track':'Gap: '+fmt(T-totalRev)],
+    ['Revenue','Prediction event revenue',fmt(predR),'',''],
+    ['Revenue','Tournament revenue',fmt(tourR),'',''],
+    ['Revenue','PvP game revenue',fmt(pvpR),'',''],
+    ['Users','Total registered users',fmtN(tu),'','Current: 7,000'],
+    ['Users','Monthly active users',fmtN(au),'',''],
+    ['Users','New signups per month',fmtN(monthlyNewUsers),'','Over 6 months'],
+    ['Engagement','Total game sessions',fmtN(totalSessions),'',''],
+    ['Engagement','Sessions per active user',val('s_sessions').toString(),'',''],
+    ['Events','Prediction events run',pe.toString(),'',Math.ceil(pe/4)+'/week'],
+    ['Events','Tournaments run',tc.toString(),'',''],
+    ['Events','PvP matches',fmtN(pm),'',fmtN(dailyMatches)+'/day'],
+    ['Volume','Total GTV',fmt(pe*pp+tc*tp+pm*ps),'',''],
+    ['Volume','Prediction purse total',fmt(pe*pp),'',''],
+    ['Volume','Tournament purse total',fmt(tc*tp),'',''],
+    ['Volume','PvP match volume',fmt(pm*ps),'',''],
+  ];
+  sc.innerHTML='<thead><tr><th>Category</th><th>KPI</th><th>Target</th><th>Status</th><th>Notes</th></tr></thead><tbody>'+
+    rows.map(r=>`<tr><td style="color:var(--text3);font-size:11px;text-transform:uppercase">${r[0]}</td><td>${r[1]}</td><td style="font-family:var(--mono);font-weight:600;text-align:right">${r[2]}</td><td>${r[3]?'<span class="badge '+r[3]+'">'+(r[3]==='tag-g'?'Hit':'Gap')+'</span>':''}</td><td style="color:var(--text3);font-size:12px">${r[4]}</td></tr>`).join('')+'</tbody>';
+}
+
+// Bind sliders
+Object.keys(sMap).forEach(k=>{
+  document.getElementById(sMap[k].el).addEventListener('input',()=>{
+    document.querySelectorAll('.pre').forEach(b=>b.classList.remove('active'));
+    document.querySelector('.pre').classList.add('active');
     update();
   });
 });
+mktSliders.forEach(id=>{document.getElementById(id).addEventListener('input',update)});
 
 update();
 </script>
